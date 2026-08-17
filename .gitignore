@@ -1,0 +1,35 @@
+.venv/
+venv/
+env/
+ENV/
+
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+.env
+.env.*
+!.env.example
+
+*.log
+*.tmp
+*.bak
+
+# Local development tools
+Tools/
+temporal.exe
+
+# Temporal local development state
+temporal.db*
+
+.DS_Store
+Thumbs.db
