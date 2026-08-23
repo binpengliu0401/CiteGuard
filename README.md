@@ -1,20 +1,25 @@
 # CiteGuard
 
-CiteGuard 是一个面向学术研究的多 Agent 系统：它能够拆解研究问题、并行检索 arXiv、生成综合报告，并对报告中的结论及其引用进行独立校验。
+CiteGuard is an academic deep-research system under active development. Its goal is to decompose research questions, search arXiv in parallel, produce source-backed reports and independently verify whether report claims are supported by retrieved evidence.
 
-## 核心能力
+The formal source tree currently contains shared research-domain contracts and
+an executable Planner path without memory reuse. The complete business Workflow
+is not implemented yet.
 
-- **自主规划**：Planner 将研究主题拆解为可并行执行的子问题。
-- **并行调研**：多个 Researcher 通过 MCP 检索并整理 arXiv 论文。
-- **报告生成**：Writer 汇总研究结果，形成结构化综合报告。
-- **引用校验**：Verifier 复用 MathMind-RAG 的可靠性模块，检查结论是否得到来源支持。
-- **持久化执行**：Temporal 负责任务编排、重试与状态恢复，避免长任务因单步失败而从头开始。
+## Target capabilities
 
-## 工作流程
+- **Autonomous planning:** Planner decomposes a research topic into independently executable subquestions.
+- **Parallel research:** Researcher Agents retrieve and evaluate arXiv papers through MCP.
+- **Report synthesis:** Writer combines research results into a structured report with source provenance.
+- **Evidence verification:** Verifier checks whether report claims are supported by the retrieved sources.
+- **Durable execution:** Temporal preserves completed work and handles bounded retries and recovery.
+- **Session memory:** Verified subquestion-level research notes can be reused within the same session.
+
+## Intended workflow
 
 ```mermaid
 flowchart LR
-    A[Research Topic] --> B[Planner]
+    A[Research question] --> B[Planner]
     B --> C1[Researcher 1]
     B --> C2[Researcher 2]
     B --> C3[Researcher N]
@@ -22,42 +27,73 @@ flowchart LR
     C2 --> D
     C3 --> D
     D --> E[Verifier]
-    E --> F[Verified Report]
+    E --> F[Verified report]
 ```
 
-## 技术组成
+## Technology
 
-- **Python**：Agent 与研究流程的主要实现语言
-- **Temporal**：长任务编排、状态持久化与失败恢复
-- **MCP**：连接 arXiv 等外部研究工具
-- **MathMind-RAG**：提供结论溯源与可靠性校验能力
+- **Python:** primary implementation language for Agents and research workflows;
+- **Temporal:** durable orchestration, retries and state recovery;
+- **MCP:** connection to arXiv and future research tools;
+- **MathMind-RAG:** intended source of reusable grounding and verification behavior.
 
-## 本地开发
+## Current implementation
 
-环境要求：Python 3.10+ 与 [Temporal CLI](https://github.com/temporalio/cli/releases)。Windows 和 Linux 用户可下载对应压缩包，将可执行文件解压到项目外并加入 `PATH`；macOS 用户也可执行 `brew install temporal`。
+- validated Planner Activity input and output contracts;
+- strict structured-output schemas for Planner model responses;
+- an OpenRouter boundary restricted to DeepSeek, Qwen and Z.ai GLM models;
+- deterministic conversion from model output to domain subquestions;
+- offline Planner tests under `tests/planner`;
+- an explicit live OpenRouter smoke test under `tests/live`.
+
+After completing the editable installation below, run one test module directly:
+
+```powershell
+python .\tests\planner\test_activity.py
+```
+
+Run the complete formal offline suite:
+
+```powershell
+python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+## Local development
+
+Requirements: Python 3.10+ and the [Temporal CLI](https://github.com/temporalio/cli/releases).
 
 ### Windows PowerShell
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+python -m pip install -e .
 temporal --version
 ```
 
-### macOS / Linux
+### macOS and Linux
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+python -m pip install -e .
 temporal --version
 ```
 
-另开终端启动本地 Temporal Server：
+The editable installation is required by the repository's `src/` layout. It
+adds `src/citeguard` to the active virtual environment without copying the
+package, so source changes take effect immediately. If the package is not
+installed, PowerShell can run a one-off command by setting `PYTHONPATH` first:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path src).Path
+python .\tests\planner\test_activity.py
+```
+
+Start a local Temporal development server in another terminal:
 
 ```bash
 temporal server start-dev --db-filename temporal.db
 ```
 
-Temporal UI 默认地址为 <http://localhost:8233>。
+The Temporal UI is available at <http://localhost:8233> by default.

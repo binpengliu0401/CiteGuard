@@ -19,10 +19,28 @@ htmlcov/
 .env
 .env.*
 !.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local agent context and project design documents
+*.md
+!/README.md
+/docs/
+/CiteGuard_Architecture_and_Code_Guide.pdf
+
+# Private learning and technical-validation spikes
+/test/
 
 *.log
 *.tmp
 *.bak
+
+# Local IDE configuration
+.idea/
+.vscode/
+*.code-workspace
 
 # Local development tools
 Tools/
