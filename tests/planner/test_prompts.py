@@ -2,7 +2,12 @@ import json
 import re
 import unittest
 
-from citeguard.domain.research import ResearchNote, ResearchResult
+from citeguard.domain.research import (
+    EvidenceStatus,
+    ResearchNote,
+    ResearchResult,
+    ResearchSource,
+)
 from citeguard.planner.prompts import (
     build_decomposition_prompt,
     build_reuse_prompt,
@@ -10,6 +15,22 @@ from citeguard.planner.prompts import (
 
 
 class PlannerPromptTests(unittest.TestCase):
+    @staticmethod
+    def _supported_result() -> ResearchResult:
+        return ResearchResult(
+            answer="An autonomous system.",
+            evidence_status=EvidenceStatus.SUPPORTED,
+            sources=[
+                ResearchSource(
+                    title="Agent systems",
+                    url="https://arxiv.org/abs/2401.00001",
+                    supported_aspects="The definition of agent systems.",
+                    limitations="The paper covers one agent architecture.",
+                    source_id="2401.00001",
+                )
+            ],
+        )
+
     def test_decomposition_prompt_uses_openrouter_roles_and_json_payload(self) -> None:
         messages = build_decomposition_prompt("What is an AI agent?")
 
@@ -24,7 +45,7 @@ class PlannerPromptTests(unittest.TestCase):
             ResearchNote(
                 id="note-1",
                 question="What is an AI agent?",
-                result=ResearchResult(answer="An autonomous system."),
+                result=self._supported_result(),
             )
         ]
         messages = build_decomposition_prompt("What is an AI agent?")
@@ -39,7 +60,7 @@ class PlannerPromptTests(unittest.TestCase):
             ResearchNote(
                 id="note-1",
                 question="What is an AI agent?",
-                result=ResearchResult(answer="An autonomous system."),
+                result=self._supported_result(),
             )
         ]
         prompts = [

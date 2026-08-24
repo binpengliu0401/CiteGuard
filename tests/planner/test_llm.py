@@ -5,7 +5,7 @@ from unittest.mock import patch
 
 import httpx
 
-from citeguard.planner.llm import (
+from citeguard.infrastructure.openrouter import (
     OpenRouterPermanentError,
     OpenRouterSettings,
     OpenRouterTransientError,
@@ -14,7 +14,7 @@ from citeguard.planner.llm import (
 from citeguard.planner.schemas import DecompositionOutput
 
 
-class OpenRouterPlannerClientTests(unittest.IsolatedAsyncioTestCase):
+class OpenRouterClientTests(unittest.IsolatedAsyncioTestCase):
     async def test_requests_strict_schema_and_parses_output(self) -> None:
         def handler(request: httpx.Request) -> httpx.Response:
             body = json.loads(request.content)
@@ -22,6 +22,7 @@ class OpenRouterPlannerClientTests(unittest.IsolatedAsyncioTestCase):
             self.assertEqual(body["response_format"]["type"], "json_schema")
             self.assertTrue(body["response_format"]["json_schema"]["strict"])
             self.assertTrue(body["provider"]["require_parameters"])
+            self.assertEqual(body["max_tokens"], 4_000)
 
             return httpx.Response(
                 200,
@@ -53,6 +54,7 @@ class OpenRouterPlannerClientTests(unittest.IsolatedAsyncioTestCase):
                     model="deepseek/test-model",
                 ),
                 client=client,
+                max_completion_tokens=4_000,
             )
 
         self.assertEqual(result.items[0].question, "What is an AI agent?")
@@ -102,6 +104,15 @@ class OpenRouterPlannerClientTests(unittest.IsolatedAsyncioTestCase):
             OpenRouterSettings(
                 api_key="test-key",
                 model="openai/example-model",
+            )
+
+    async def test_completion_limit_must_be_positive(self) -> None:
+        with self.assertRaisesRegex(ValueError, "positive integer"):
+            await request_structured_output(
+                [("user", "Plan research.")],
+                DecompositionOutput,
+                settings=OpenRouterSettings(api_key="test-key"),
+                max_completion_tokens=0,
             )
 
 

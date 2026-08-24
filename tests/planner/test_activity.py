@@ -33,7 +33,12 @@ class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
         )
 
     async def test_memory_path_fails_explicitly(self) -> None:
-        from citeguard.domain.research import ResearchNote, ResearchResult
+        from citeguard.domain.research import (
+            EvidenceStatus,
+            ResearchNote,
+            ResearchResult,
+            ResearchSource,
+        )
 
         planner_input = PlannerActivityInput(
             research_question="What is an AI agent?",
@@ -42,7 +47,19 @@ class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
                 ResearchNote(
                     id="note-1",
                     question="What is an AI agent?",
-                    result=ResearchResult(answer="An autonomous tool-using system."),
+                    result=ResearchResult(
+                        answer="An autonomous tool-using system.",
+                        evidence_status=EvidenceStatus.SUPPORTED,
+                        sources=[
+                            ResearchSource(
+                                title="Agent systems",
+                                url="https://arxiv.org/abs/2401.00001",
+                                supported_aspects="The definition of agent systems.",
+                                limitations="The paper covers one agent architecture.",
+                                source_id="2401.00001",
+                            )
+                        ],
+                    ),
                 )
             ],
         )

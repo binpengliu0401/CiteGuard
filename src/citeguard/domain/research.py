@@ -11,16 +11,27 @@ class SubQuestionStatus(str, Enum):
     REUSED_FROM_MEMORY = "reused_from_memory"
 
 
+class EvidenceStatus(str, Enum):
+    """Whether retrieved evidence can support the Researcher conclusion."""
+
+    SUPPORTED = "supported"
+    NO_RELEVANT_SOURCES = "no_relevant_sources"
+    INSUFFICIENT_EVIDENCE = "insufficient_evidence"
+
+
 @dataclass(frozen=True)
 class ResearchSource:
     """One source used by a Researcher to support a research conclusion.
 
     `source_id` is provider-specific metadata, while `url` is the minimum stable
-    locator required by later Writer and Verifier modules.
+    locator required by later Writer and Verifier modules. Support and limitation
+    notes preserve the Researcher's evidence judgment for those consumers.
     """
 
     title: str
     url: str
+    supported_aspects: str
+    limitations: str
     source_id: str | None = None
     summary: str | None = None
 
@@ -29,6 +40,11 @@ class ResearchSource:
 
         _require_non_blank(self.title, "ResearchSource.title")
         _require_non_blank(self.url, "ResearchSource.url")
+        _require_non_blank(
+            self.supported_aspects,
+            "ResearchSource.supported_aspects",
+        )
+        _require_non_blank(self.limitations, "ResearchSource.limitations")
 
         if self.source_id is not None:
             _require_non_blank(self.source_id, "ResearchSource.source_id")
@@ -38,17 +54,50 @@ class ResearchSource:
 class ResearchResult:
     """Standard Researcher output and the content reusable by Planner.
 
-    The answer and its supporting sources travel together so later aggregation
-    never has to recover provenance from provider-specific responses.
+    Researcher creates this result for Writer, Verifier, and future Memory.
+    The answer, evidence state, explanation, and used sources travel together so
+    later modules never have to recover provenance from provider responses.
     """
 
     answer: str
+    evidence_status: EvidenceStatus
     sources: list[ResearchSource] = field(default_factory=list)
+    evidence_reason: str | None = None
 
     def __post_init__(self) -> None:
-        """Reject an empty research answer before it enters Memory."""
+        """Enforce evidence-state invariants before a result enters the Workflow."""
 
         _require_non_blank(self.answer, "ResearchResult.answer")
+
+        if not isinstance(self.evidence_status, EvidenceStatus):
+            raise TypeError("ResearchResult.evidence_status must be an EvidenceStatus")
+        if not isinstance(self.sources, list) or not all(
+            isinstance(source, ResearchSource) for source in self.sources
+        ):
+            raise TypeError("ResearchResult.sources must contain ResearchSource objects")
+
+        if self.evidence_status is EvidenceStatus.SUPPORTED:
+            if not self.sources:
+                raise ValueError("supported research requires at least one source")
+            if self.evidence_reason is not None:
+                raise ValueError("supported research must not have an evidence_reason")
+            return
+
+        if self.evidence_reason is None:
+            raise ValueError("unsupported research requires an evidence_reason")
+        _require_non_blank(self.evidence_reason, "ResearchResult.evidence_reason")
+
+        if (
+            self.evidence_status is EvidenceStatus.NO_RELEVANT_SOURCES
+            and self.sources
+        ):
+            raise ValueError("no_relevant_sources must not contain sources")
+
+        if (
+            self.evidence_status is EvidenceStatus.INSUFFICIENT_EVIDENCE
+            and not self.sources
+        ):
+            raise ValueError("insufficient_evidence requires at least one partial source")
 
 
 @dataclass(frozen=True)

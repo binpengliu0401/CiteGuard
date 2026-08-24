@@ -4,9 +4,12 @@ from pydantic import ValidationError
 from temporalio import activity
 from temporalio.exceptions import ApplicationError
 
+from citeguard.infrastructure.openrouter import (
+    OpenRouterPermanentError,
+    request_structured_output,
+)
 from citeguard.planner.assembly import assemble_decomposition
 from citeguard.planner.contracts import PlannerActivityInput, PlannerActivityOutput
-from citeguard.planner.llm import OpenRouterPermanentError, request_structured_output
 from citeguard.planner.prompts import build_decomposition_prompt
 from citeguard.planner.schemas import DecompositionOutput
 

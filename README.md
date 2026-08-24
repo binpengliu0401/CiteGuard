@@ -2,9 +2,9 @@
 
 CiteGuard is an academic deep-research system under active development. Its goal is to decompose research questions, search arXiv in parallel, produce source-backed reports and independently verify whether report claims are supported by retrieved evidence.
 
-The formal source tree currently contains shared research-domain contracts and
-an executable Planner path without memory reuse. The complete business Workflow
-is not implemented yet.
+The formal source tree currently contains shared research-domain contracts, an
+executable Planner path without memory reuse, and a single-subquestion
+Researcher. The complete business Workflow is not implemented yet.
 
 ## Target capabilities
 
@@ -43,8 +43,11 @@ flowchart LR
 - strict structured-output schemas for Planner model responses;
 - an OpenRouter boundary restricted to DeepSeek, Qwen and Z.ai GLM models;
 - deterministic conversion from model output to domain subquestions;
-- offline Planner tests under `tests/planner`;
-- an explicit live OpenRouter smoke test under `tests/live`.
+- a single Researcher using two structured LLM calls around concurrent arXiv
+  searches over one MCP session;
+- explicit evidence statuses and per-paper relevance assessments;
+- offline tests under `tests/planner`, `tests/researcher`, and `tests/domain`;
+- explicit live Planner and Researcher smoke tests under `tests/live`.
 
 After completing the editable installation below, run one test module directly:
 
