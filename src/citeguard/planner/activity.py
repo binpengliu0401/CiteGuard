@@ -9,7 +9,10 @@ from citeguard.infrastructure.openrouter import (
     request_structured_output,
 )
 from citeguard.planner.assembly import assemble_decomposition
-from citeguard.planner.contracts import PlannerActivityInput, PlannerActivityOutput
+from citeguard.planner.contracts import (
+    PlannerActivityInput,
+    PlannerActivityOutput,
+)
 from citeguard.planner.prompts import build_decomposition_prompt
 from citeguard.planner.schemas import DecompositionOutput
 

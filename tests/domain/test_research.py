@@ -45,7 +45,9 @@ class ResearchResultTests(unittest.TestCase):
                 limitations="Only the abstract was evaluated.",
             )
 
-    def test_no_relevant_sources_requires_explanation_and_no_sources(self) -> None:
+    def test_no_relevant_sources_requires_reason_and_no_sources(
+        self,
+    ) -> None:
         result = ResearchResult(
             answer="No relevant arXiv evidence was found.",
             evidence_status=EvidenceStatus.NO_RELEVANT_SOURCES,
@@ -62,7 +64,7 @@ class ResearchResultTests(unittest.TestCase):
                 evidence_reason="The source was not relevant.",
             )
 
-    def test_insufficient_evidence_keeps_partial_sources_and_reason(self) -> None:
+    def test_insufficient_evidence_keeps_source_and_reason(self) -> None:
         result = ResearchResult(
             answer="The available abstract supports only part of the question.",
             evidence_status=EvidenceStatus.INSUFFICIENT_EVIDENCE,
@@ -72,12 +74,13 @@ class ResearchResultTests(unittest.TestCase):
 
         self.assertEqual(result.sources[0].source_id, "2401.00001")
 
-        with self.assertRaisesRegex(ValueError, "partial source"):
-            ResearchResult(
-                answer="Evidence is incomplete.",
-                evidence_status=EvidenceStatus.INSUFFICIENT_EVIDENCE,
-                evidence_reason="No usable paper was retained.",
-            )
+        unclassified = ResearchResult(
+            answer="Evidence is incomplete.",
+            evidence_status=EvidenceStatus.INSUFFICIENT_EVIDENCE,
+            evidence_reason="Candidate abstracts lacked enough information.",
+        )
+
+        self.assertEqual(unclassified.sources, [])
 
 
 if __name__ == "__main__":

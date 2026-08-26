@@ -1,7 +1,10 @@
 import unittest
 
 from citeguard.domain.research import SubQuestion, SubQuestionStatus
-from citeguard.planner.contracts import PlannerActivityInput, PlannerActivityOutput
+from citeguard.planner.contracts import (
+    PlannerActivityInput,
+    PlannerActivityOutput,
+)
 
 
 class PlannerContractTests(unittest.TestCase):
@@ -12,7 +15,10 @@ class PlannerContractTests(unittest.TestCase):
             existing_notes=[],
         )
 
-        self.assertEqual(planner_input.research_question, "What is an AI agent?")
+        self.assertEqual(
+            planner_input.research_question,
+            "What is an AI agent?",
+        )
 
     def test_blank_input_is_rejected(self) -> None:
         with self.assertRaisesRegex(ValueError, "research_question"):

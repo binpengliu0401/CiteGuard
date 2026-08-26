@@ -11,7 +11,10 @@ class PlannerSchemaTests(unittest.TestCase):
             question="What is an AI agent?",
         )
 
-        self.assertEqual(result.model_dump(), {"question": "What is an AI agent?"})
+        self.assertEqual(
+            result.model_dump(),
+            {"question": "What is an AI agent?"},
+        )
 
     def test_decomposed_question_rejects_extra_fields(self) -> None:
         with self.assertRaises(ValidationError):

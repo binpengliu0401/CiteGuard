@@ -55,17 +55,46 @@ Evaluate relevance and evidentiary support using all six criteria:
 5. Which exact aspects of the subquestion can the paper support?
 6. Which aspects cannot be supported by this paper, and what limitations remain?
 
-Classify each paper as direct, partial, background, or irrelevant. Produce one
-assessment for every candidate source ID, including unsupported aspects and
-limitations. Use only direct or partial papers in `used_source_ids`. Never
+For every paper, report factorized judgments instead of choosing a final
+relevance label:
+- `object_match` and `problem_match` are full, partial, or mismatch;
+- `constraint_match` is full, partial, mismatch, or not_applicable;
+- `evidence_kind` is answer_bearing only when the abstract reports a method or
+  finding that can answer the subquestion, context_only for background material,
+  none when it supplies no relevant evidence, or unknown only when the title and
+  abstract omit information required to classify the candidate;
+- `answer_coverage` is full, partial, or none.
+
+Use full only when the candidate preserves the exact required scope. Use partial
+only when the abstract still supports a concrete sub-aspect despite missing part
+of that scope. Use mismatch when the dimension cannot support the subquestion.
+Use not_applicable only when the subquestion states no explicit constraint of
+that kind. All judgments are relative to the supplied subquestion, not to the
+paper's own objectives in isolation.
+
+Project code derives the final relevance label from those factors. A direct
+paper requires full object and problem matches, full or inapplicable constraint
+match, answer-bearing evidence, and full answer coverage. A partial paper has
+answer-bearing evidence for a real sub-aspect but misses part of the scope or
+constraints. A background paper supplies context but no answer-bearing evidence.
+An irrelevant paper mismatches the object or problem or supplies no relevant
+evidence. Unknown is a conservative abstention for insufficient abstract
+information, not a substitute for a difficult judgment or low confidence.
+
+Produce one assessment for every candidate source ID. Set `supported_aspects`
+to a concrete explanation only for evidence that can answer at least part of the
+subquestion; otherwise set it to null. Always explain limitations. Use only
+papers whose derived label is direct or partial in `used_source_ids`. Never
 fabricate, alter, or guess a source ID.
 
 Use `supported` only when at least one direct paper supports the conclusion.
-Use `no_relevant_sources` when no candidate is direct or partial and explain why.
+Use `no_relevant_sources` when no candidate is direct or partial and explain
+why.
 Use `insufficient_evidence` when one or more candidates are useful but cannot
-fully support a conclusion, and explain the missing evidence. In all cases,
-write an answer that communicates the result; do not fill evidence gaps with
-general knowledge.
+fully support a conclusion, or when an unknown candidate cannot be classified
+from its title and abstract. Explain the missing evidence. In all cases, write
+an answer that communicates the result; do not fill evidence gaps with general
+knowledge.
 
 Output
 Return only data accepted by the bound structured-output schema. Do not include

@@ -24,8 +24,9 @@ class ResearchSource:
     """One source used by a Researcher to support a research conclusion.
 
     `source_id` is provider-specific metadata, while `url` is the minimum stable
-    locator required by later Writer and Verifier modules. Support and limitation
-    notes preserve the Researcher's evidence judgment for those consumers.
+    locator required by later Writer and Verifier modules. Support and
+    limitation notes preserve the Researcher's evidence judgment for those
+    consumers.
     """
 
     title: str
@@ -65,27 +66,38 @@ class ResearchResult:
     evidence_reason: str | None = None
 
     def __post_init__(self) -> None:
-        """Enforce evidence-state invariants before a result enters the Workflow."""
+        """Enforce evidence-state invariants before Workflow entry."""
 
         _require_non_blank(self.answer, "ResearchResult.answer")
 
         if not isinstance(self.evidence_status, EvidenceStatus):
-            raise TypeError("ResearchResult.evidence_status must be an EvidenceStatus")
+            raise TypeError(
+                "ResearchResult.evidence_status must be an EvidenceStatus"
+            )
         if not isinstance(self.sources, list) or not all(
             isinstance(source, ResearchSource) for source in self.sources
         ):
-            raise TypeError("ResearchResult.sources must contain ResearchSource objects")
+            raise TypeError(
+                "ResearchResult.sources must contain ResearchSource objects"
+            )
 
         if self.evidence_status is EvidenceStatus.SUPPORTED:
             if not self.sources:
-                raise ValueError("supported research requires at least one source")
+                raise ValueError(
+                    "supported research requires at least one source"
+                )
             if self.evidence_reason is not None:
-                raise ValueError("supported research must not have an evidence_reason")
+                raise ValueError(
+                    "supported research must not have an evidence_reason"
+                )
             return
 
         if self.evidence_reason is None:
             raise ValueError("unsupported research requires an evidence_reason")
-        _require_non_blank(self.evidence_reason, "ResearchResult.evidence_reason")
+        _require_non_blank(
+            self.evidence_reason,
+            "ResearchResult.evidence_reason",
+        )
 
         if (
             self.evidence_status is EvidenceStatus.NO_RELEVANT_SOURCES
@@ -93,11 +105,10 @@ class ResearchResult:
         ):
             raise ValueError("no_relevant_sources must not contain sources")
 
-        if (
-            self.evidence_status is EvidenceStatus.INSUFFICIENT_EVIDENCE
-            and not self.sources
-        ):
-            raise ValueError("insufficient_evidence requires at least one partial source")
+        # Insufficient evidence can retain partially useful sources or report
+        # that candidate abstracts lacked enough information to classify. In
+        # the latter case no source is used in the answer, so the list is empty.
+        return
 
 
 @dataclass(frozen=True)
@@ -134,7 +145,7 @@ class SubQuestion:
     source_note_id: str | None = None
 
     def __post_init__(self) -> None:
-        """Enforce identity, status type, and status-dependent field invariants."""
+        """Enforce identity, status, and dependent-field invariants."""
 
         _require_non_blank(self.id, "SubQuestion.id")
         _require_non_blank(self.question, "SubQuestion.question")
@@ -145,14 +156,17 @@ class SubQuestion:
         # A new task must be sent to a Researcher and therefore cannot carry a
         # historical result or claim provenance from a ResearchNote.
         if self.status is SubQuestionStatus.NEW:
-            if self.reused_result is not None or self.source_note_id is not None:
+            if (
+                self.reused_result is not None
+                or self.source_note_id is not None
+            ):
                 raise ValueError(
                     "reused_result and source_note_id must be empty when "
                     "status is new"
                 )
             return
 
-        # Reuse is valid only when both the result and its source note are known.
+        # Reuse is valid only when the result and source note are known.
         if self.reused_result is None or self.source_note_id is None:
             raise ValueError(
                 "reused_result and source_note_id are required when status is "

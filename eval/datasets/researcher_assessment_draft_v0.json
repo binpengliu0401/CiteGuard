@@ -1,0 +1,318 @@
+{
+  "schema_version": "3",
+  "dataset_id": "researcher-assessment-pilot",
+  "version": "0.4.0-draft",
+  "annotation_status": "draft",
+  "subquestion_origin": "manual",
+  "relevance_grades": {
+    "direct": 3,
+    "partial": 2,
+    "background": 1,
+    "irrelevant": 0
+  },
+  "items": [
+    {
+      "item_id": "scifact-task__scifact",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What scientific claim-verification task does SciFact define?"
+      ],
+      "source_id": "2004.14974v6",
+      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
+      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full",
+      "gold_relevance": "direct",
+      "annotation_reason": [
+        "The abstract defines the task as selecting literature abstracts",
+        "that support or refute a scientific claim and identifying the",
+        "rationales that justify the decision."
+      ]
+    },
+    {
+      "item_id": "scifact-task__multivers",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What scientific claim-verification task does SciFact define?"
+      ],
+      "source_id": "2112.01640v2",
+      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
+      "title": [
+        "MultiVerS: Improving scientific claim verification with weak",
+        "supervision and full-document context"
+      ],
+      "object_match": "partial",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
+      "annotation_reason": [
+        "The abstract directly defines the scientific claim-verification",
+        "task in terms of document labels and evidentiary rationales, but",
+        "it does not attribute that task definition to SciFact."
+      ]
+    },
+    {
+      "item_id": "scifact-task__fever",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What scientific claim-verification task does SciFact define?"
+      ],
+      "source_id": "1803.05355v3",
+      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
+      "title": [
+        "FEVER: a large-scale dataset for Fact Extraction and",
+        "VERification"
+      ],
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none",
+      "gold_relevance": "background",
+      "annotation_reason": [
+        "FEVER describes general-domain verification against Wikipedia",
+        "sources, so it provides historical context but does not establish",
+        "the scientific-literature task defined by SciFact."
+      ]
+    },
+    {
+      "item_id": "scifact-task__sbert",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What scientific claim-verification task does SciFact define?"
+      ],
+      "source_id": "1908.10084v1",
+      "source_version_url": "https://arxiv.org/abs/1908.10084v1",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "none",
+      "answer_coverage": "none",
+      "gold_relevance": "irrelevant",
+      "annotation_reason": [
+        "The abstract concerns sentence embeddings and semantic similarity,",
+        "not SciFact or scientific claim verification."
+      ]
+    },
+    {
+      "item_id": "scifact-record__scifact",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "How is each example in the SciFact dataset represented?"
+      ],
+      "source_id": "2004.14974v6",
+      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
+      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full",
+      "gold_relevance": "direct",
+      "annotation_reason": [
+        "The abstract says SciFact pairs expert-written scientific claims",
+        "with evidence-containing abstracts annotated with labels and",
+        "rationales, directly describing each example's representation."
+      ]
+    },
+    {
+      "item_id": "scifact-record__multivers",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "How is each example in the SciFact dataset represented?"
+      ],
+      "source_id": "2112.01640v2",
+      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
+      "title": [
+        "MultiVerS: Improving scientific claim verification with weak",
+        "supervision and full-document context"
+      ],
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none",
+      "gold_relevance": "background",
+      "annotation_reason": [
+        "The abstract discusses claims, scientific documents, labels, and",
+        "rationales in the broader task, but it does not identify SciFact",
+        "or describe the representation of a SciFact example."
+      ]
+    },
+    {
+      "item_id": "scifact-record__fever",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "How is each example in the SciFact dataset represented?"
+      ],
+      "source_id": "1803.05355v3",
+      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
+      "title": [
+        "FEVER: a large-scale dataset for Fact Extraction and",
+        "VERification"
+      ],
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none",
+      "gold_relevance": "background",
+      "annotation_reason": [
+        "FEVER describes claims, labels, and evidence sentences in a",
+        "different Wikipedia-based dataset, providing comparison context",
+        "but no evidence about a SciFact example."
+      ]
+    },
+    {
+      "item_id": "scifact-record__sbert",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "How is each example in the SciFact dataset represented?"
+      ],
+      "source_id": "1908.10084v1",
+      "source_version_url": "https://arxiv.org/abs/1908.10084v1",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "none",
+      "answer_coverage": "none",
+      "gold_relevance": "irrelevant",
+      "annotation_reason": [
+        "The abstract does not discuss SciFact or the representation of",
+        "fact-verification dataset examples."
+      ]
+    },
+    {
+      "item_id": "scifact-baselines__scifact",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What do the baseline experiments reported for SciFact establish?"
+      ],
+      "source_id": "2004.14974v6",
+      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
+      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full",
+      "gold_relevance": "direct",
+      "annotation_reason": [
+        "The abstract reports that simple domain adaptation substantially",
+        "improves over models trained on Wikipedia or political news and",
+        "that SciFact remains a challenging testbed."
+      ]
+    },
+    {
+      "item_id": "scifact-baselines__multivers",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What do the baseline experiments reported for SciFact establish?"
+      ],
+      "source_id": "2112.01640v2",
+      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
+      "title": [
+        "MultiVerS: Improving scientific claim verification with weak",
+        "supervision and full-document context"
+      ],
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none",
+      "gold_relevance": "background",
+      "annotation_reason": [
+        "The abstract reports MultiVerS results against later competitive",
+        "baselines, but it neither identifies SciFact nor reports what the",
+        "original SciFact baseline experiments established."
+      ]
+    },
+    {
+      "item_id": "scifact-baselines__fever",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What do the baseline experiments reported for SciFact establish?"
+      ],
+      "source_id": "1803.05355v3",
+      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
+      "title": [
+        "FEVER: a large-scale dataset for Fact Extraction and",
+        "VERification"
+      ],
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none",
+      "gold_relevance": "background",
+      "annotation_reason": [
+        "FEVER reports baseline and oracle results for its own Wikipedia",
+        "dataset, which is useful historical context but does not establish",
+        "the result of SciFact's baseline experiments."
+      ]
+    },
+    {
+      "item_id": "scifact-baselines__sbert",
+      "original_question": [
+        "How have fact-verification datasets and systems evolved from",
+        "general-domain claims to scientific-literature claims?"
+      ],
+      "subquestion": [
+        "What do the baseline experiments reported for SciFact establish?"
+      ],
+      "source_id": "1908.10084v1",
+      "source_version_url": "https://arxiv.org/abs/1908.10084v1",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "none",
+      "answer_coverage": "none",
+      "gold_relevance": "irrelevant",
+      "annotation_reason": [
+        "The abstract reports sentence-embedding experiments rather than",
+        "SciFact baseline experiments."
+      ]
+    }
+  ]
+}

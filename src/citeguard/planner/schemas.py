@@ -24,7 +24,8 @@ class DecomposedQuestion(BaseModel):
 
     question: str = Field(
         description=(
-            "A complete, independently researchable subquestion."
+            "A complete, independently researchable subquestion with one "
+            "primary answer target."
         ),
     )
 
@@ -62,7 +63,8 @@ class PlannedQuestion(BaseModel):
 
     question: str = Field(
         description=(
-            "A complete, independently researchable subquestion."
+            "A complete, independently researchable subquestion with one "
+            "primary answer target."
         ),
     )
     status: SubQuestionStatus = Field(
@@ -103,8 +105,7 @@ class PlannedQuestion(BaseModel):
     def validate_memory_reference(self) -> Self:
         """Keep execution status and note-reference presence consistent."""
 
-        # New research must not claim a note match. Reused research must identify
-        # which provided note supplies the result.
+        # New research cannot claim a note match. Reuse identifies its note.
         if self.status is SubQuestionStatus.NEW:
             if self.matched_note_id is not None:
                 raise ValueError(

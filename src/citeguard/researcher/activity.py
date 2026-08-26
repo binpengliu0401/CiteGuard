@@ -19,7 +19,10 @@ from citeguard.researcher.prompts import (
     build_search_plan_prompt,
     build_synthesis_prompt,
 )
-from citeguard.researcher.schemas import ResearchSynthesisOutput, SearchPlanOutput
+from citeguard.researcher.schemas import (
+    ResearchSynthesisOutput,
+    SearchPlanOutput,
+)
 
 SYNTHESIS_MAX_COMPLETION_TOKENS = 8_000
 
@@ -57,7 +60,8 @@ async def research_sub_question(input: ResearchTaskInput) -> ResearchResult:
     # Reject feedback until content retry can actually change research behavior.
     if input.verifier_feedback is not None:
         raise ApplicationError(
-            "Researcher content retry is not implemented in this development slice",
+            "Researcher content retry is not implemented in this "
+            "development slice",
             type="ResearcherContentRetryNotImplemented",
             non_retryable=True,
         )

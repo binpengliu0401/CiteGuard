@@ -18,7 +18,10 @@ class OpenRouterClientTests(unittest.IsolatedAsyncioTestCase):
     async def test_requests_strict_schema_and_parses_output(self) -> None:
         def handler(request: httpx.Request) -> httpx.Response:
             body = json.loads(request.content)
-            self.assertEqual(request.headers["Authorization"], "Bearer test-key")
+            self.assertEqual(
+                request.headers["Authorization"],
+                "Bearer test-key",
+            )
             self.assertEqual(body["response_format"]["type"], "json_schema")
             self.assertTrue(body["response_format"]["json_schema"]["strict"])
             self.assertTrue(body["provider"]["require_parameters"])

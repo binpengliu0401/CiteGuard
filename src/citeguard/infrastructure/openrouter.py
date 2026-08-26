@@ -10,7 +10,9 @@ from typing import TypeVar
 import httpx
 from pydantic import BaseModel, ValidationError
 
-OPENROUTER_CHAT_COMPLETIONS_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_CHAT_COMPLETIONS_URL = (
+    "https://openrouter.ai/api/v1/chat/completions"
+)
 DEFAULT_OPENROUTER_MODEL = "deepseek/deepseek-v4-flash-0731"
 ALLOWED_MODEL_PREFIXES = ("deepseek/", "qwen/", "z-ai/")
 DEFAULT_TIMEOUT_SECONDS = 60.0
@@ -78,7 +80,9 @@ class OpenRouterSettings:
 
         api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("API_KEY")
         if api_key is None:
-            raise OpenRouterPermanentError("OPENROUTER_API_KEY or API_KEY is required")
+            raise OpenRouterPermanentError(
+                "OPENROUTER_API_KEY or API_KEY is required"
+            )
         return cls(
             api_key=api_key,
             model=os.getenv("OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL),
@@ -96,7 +100,8 @@ async def request_structured_output(
     """Request and validate one strict JSON-Schema response from OpenRouter.
 
     Args:
-        messages: Trusted policy and untrusted data messages from an Agent module.
+        messages: Trusted policy and untrusted data messages from an Agent
+            module.
         output_type: Pydantic model defining the only accepted response shape.
         settings: Optional explicit credentials and model settings for tests.
         client: Optional injected client for deterministic HTTP tests.
@@ -106,8 +111,10 @@ async def request_structured_output(
         Model content validated as the requested Pydantic type.
 
     Raises:
-        OpenRouterTransientError: If transport or provider conditions may recover.
-        OpenRouterPermanentError: If the request or response is invalid unchanged.
+        OpenRouterTransientError: If transport or provider conditions may
+            recover.
+        OpenRouterPermanentError: If the request or response is invalid
+            unchanged.
         ValueError: If outgoing messages are malformed.
 
     Side effects:

@@ -45,8 +45,11 @@ flowchart LR
 - deterministic conversion from model output to domain subquestions;
 - a single Researcher using two structured LLM calls around concurrent arXiv
   searches over one MCP session;
-- explicit evidence statuses and per-paper relevance assessments;
-- offline tests under `tests/planner`, `tests/researcher`, and `tests/domain`;
+- explicit evidence statuses and deterministic relevance labels derived from
+  factorized per-paper assessments, with a conservative `unknown` abstention;
+- a draft, versioned Researcher assessment dataset and offline metric runner;
+- offline tests covering Planner, Researcher, domain contracts, evaluation,
+  and repository style rules;
 - explicit live Planner and Researcher smoke tests under `tests/live`.
 
 After completing the editable installation below, run one test module directly:
@@ -60,6 +63,18 @@ Run the complete formal offline suite:
 ```powershell
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
+
+Run the review fixture through the Researcher assessment metrics:
+
+```powershell
+python -m citeguard.evaluation.runner `
+  --dataset eval/datasets/researcher_assessment_draft_v0.json `
+  --predictions eval/fixtures/researcher_assessment_predictions_v0.json
+```
+
+The bundled assessment dataset is still a human-reviewable draft. The fixture
+validates the runner and metric behavior; its score is not a production-quality
+claim about the Researcher.
 
 ## Local development
 

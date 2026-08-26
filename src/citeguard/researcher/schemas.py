@@ -1,11 +1,24 @@
 """Structured-output schemas for the Researcher's two LLM decisions."""
 
-from enum import Enum
 from typing import Self
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    field_validator,
+    model_validator,
+)
 
 from citeguard.domain.research import EvidenceStatus
+from citeguard.researcher.relevance import (
+    AnswerCoverage,
+    ConstraintMatch,
+    EvidenceKind,
+    MatchLevel,
+    RelevanceLevel,
+    derive_relevance,
+)
 
 
 class SearchPlanOutput(BaseModel):
@@ -20,12 +33,17 @@ class SearchPlanOutput(BaseModel):
     queries: list[str] = Field(
         min_length=1,
         max_length=5,
-        description="One to five distinct queries for retrieving candidate papers.",
+        description=(
+            "One to five distinct queries for retrieving candidate papers."
+        ),
     )
 
     @field_validator("queries")
     @classmethod
-    def queries_must_be_nonblank_and_distinct(cls, values: list[str]) -> list[str]:
+    def queries_must_be_nonblank_and_distinct(
+        cls,
+        values: list[str],
+    ) -> list[str]:
         """Reject empty or duplicate queries without rewriting model text."""
 
         keys: set[str] = set()
@@ -39,41 +57,102 @@ class SearchPlanOutput(BaseModel):
         return values
 
 
-class RelevanceLevel(str, Enum):
-    """How directly one candidate paper can support the exact subquestion."""
-
-    DIRECT = "direct"
-    PARTIAL = "partial"
-    BACKGROUND = "background"
-    IRRELEVANT = "irrelevant"
-
-
 class PaperAssessment(BaseModel):
     """The second model decision for one supplied candidate paper.
 
-    The source ID must come from candidate data. Support and limitation text
-    records why the paper can or cannot contribute to the final answer.
+    The model reports observable semantic factors rather than selecting the
+    final relevance label. Project code derives that label from a stable policy.
     """
 
     model_config = ConfigDict(extra="forbid")
 
-    source_id: str = Field(description="Exact source ID from the candidate data.")
-    relevance: RelevanceLevel
-    supported_aspects: str = Field(
-        description="Exact aspects supported by the title and abstract, or 'none'."
+    source_id: str = Field(
+        description="Exact source ID from the candidate data."
+    )
+    object_match: MatchLevel = Field(
+        description=(
+            "Match between the paper and the subquestion's research object."
+        )
+    )
+    problem_match: MatchLevel = Field(
+        description="Match between the paper's problem and the subquestion."
+    )
+    constraint_match: ConstraintMatch = Field(
+        description=(
+            "Coverage of explicit population, setting, method, time, and other "
+            "constraints."
+        )
+    )
+    evidence_kind: EvidenceKind = Field(
+        description=(
+            "Whether the abstract contains answer-bearing evidence, context "
+            "only, no evidence, or insufficient information to classify the "
+            "candidate."
+        )
+    )
+    answer_coverage: AnswerCoverage = Field(
+        description="How much of the exact subquestion the evidence can answer."
+    )
+    supported_aspects: str | None = Field(
+        description=(
+            "Exact aspects supported by the title and abstract; null when the "
+            "candidate cannot support an answer."
+        )
     )
     limitations: str = Field(
-        description="Missing support, scope mismatch, or other evidence limitations."
+        description=(
+            "Missing support, scope mismatch, or other evidence limitations."
+        )
     )
 
-    @field_validator("source_id", "supported_aspects", "limitations")
+    @field_validator("source_id", "limitations")
     @classmethod
     def text_must_not_be_blank(cls, value: str) -> str:
-        """Require explanatory assessment fields for every candidate."""
+        """Require candidate identity and an explanatory limitation."""
 
         if not value.strip():
             raise ValueError("paper assessment text must not be blank")
         return value
+
+    @field_validator("supported_aspects")
+    @classmethod
+    def supported_aspects_must_not_be_blank(
+        cls,
+        value: str | None,
+    ) -> str | None:
+        """Allow a real supported aspect or null, never a blank placeholder."""
+
+        if value is not None and not value.strip():
+            raise ValueError("supported_aspects must not be blank")
+        return value
+
+    @model_validator(mode="after")
+    def validate_factorized_assessment(self) -> Self:
+        """Derive relevance and keep support text consistent with that label."""
+
+        if self.relevance in {RelevanceLevel.DIRECT, RelevanceLevel.PARTIAL}:
+            if self.supported_aspects is None:
+                raise ValueError("usable evidence requires supported_aspects")
+            return self
+
+        if self.supported_aspects is not None:
+            raise ValueError(
+                "background, irrelevant, or unknown evidence must not claim "
+                "supported aspects"
+            )
+        return self
+
+    @property
+    def relevance(self) -> RelevanceLevel:
+        """Return the deterministic label derived from factorized judgments."""
+
+        return derive_relevance(
+            object_match=self.object_match,
+            problem_match=self.problem_match,
+            constraint_match=self.constraint_match,
+            evidence_kind=self.evidence_kind,
+            answer_coverage=self.answer_coverage,
+        )
 
 
 class ResearchSynthesisOutput(BaseModel):
@@ -85,7 +164,9 @@ class ResearchSynthesisOutput(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    answer: str = Field(description="A concise answer bounded by retrieved evidence.")
+    answer: str = Field(
+        description="A concise answer bounded by retrieved evidence."
+    )
     evidence_status: EvidenceStatus
     evidence_reason: str | None = Field(
         description=(
@@ -111,7 +192,7 @@ class ResearchSynthesisOutput(BaseModel):
     @field_validator("evidence_reason")
     @classmethod
     def reason_must_not_be_blank(cls, value: str | None) -> str | None:
-        """Allow either a real explanation or null, never a blank placeholder."""
+        """Allow a real explanation or null, never a blank placeholder."""
 
         if value is not None and not value.strip():
             raise ValueError("evidence_reason must not be blank")
@@ -119,7 +200,7 @@ class ResearchSynthesisOutput(BaseModel):
 
     @model_validator(mode="after")
     def validate_evidence_decision(self) -> Self:
-        """Keep status, used sources, assessments, and explanations consistent."""
+        """Keep status, sources, assessments, and reasons consistent."""
 
         assessment_by_id: dict[str, PaperAssessment] = {}
         for assessment in self.assessments:
@@ -129,7 +210,10 @@ class ResearchSynthesisOutput(BaseModel):
 
         if len(self.used_source_ids) != len(set(self.used_source_ids)):
             raise ValueError("used source IDs must be unique")
-        if any(source_id not in assessment_by_id for source_id in self.used_source_ids):
+        if any(
+            source_id not in assessment_by_id
+            for source_id in self.used_source_ids
+        ):
             raise ValueError("every used source must have an assessment")
 
         used_assessments = [
@@ -166,10 +250,24 @@ class ResearchSynthesisOutput(BaseModel):
                 for assessment in self.assessments
             ):
                 raise ValueError(
-                    "no relevant sources cannot include direct or partial assessments"
+                    "no relevant sources cannot include direct or partial "
+                    "assessments"
+                )
+            if any(
+                assessment.relevance is RelevanceLevel.UNKNOWN
+                for assessment in self.assessments
+            ):
+                raise ValueError(
+                    "unknown assessments require insufficient evidence"
                 )
             return self
 
-        if not self.used_source_ids:
-            raise ValueError("insufficient evidence requires a partially useful source")
+        if not self.used_source_ids and not any(
+            assessment.relevance is RelevanceLevel.UNKNOWN
+            for assessment in self.assessments
+        ):
+            raise ValueError(
+                "insufficient evidence requires a partially useful or "
+                "unknown source"
+            )
         return self

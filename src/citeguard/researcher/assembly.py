@@ -31,7 +31,9 @@ def assemble_research_result(
 
     assessed_ids = {assessment.source_id for assessment in output.assessments}
     if assessed_ids != set(candidate_by_id):
-        raise ValueError("model assessments must exactly match candidate source IDs")
+        raise ValueError(
+            "model assessments must exactly match candidate source IDs"
+        )
 
     unknown_ids = set(output.used_source_ids) - set(candidate_by_id)
     if unknown_ids:

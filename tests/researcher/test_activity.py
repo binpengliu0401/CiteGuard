@@ -17,9 +17,14 @@ from citeguard.researcher.activity import (
 )
 from citeguard.researcher.arxiv import ArxivPaper
 from citeguard.researcher.contracts import ResearchTaskInput
+from citeguard.researcher.relevance import (
+    AnswerCoverage,
+    ConstraintMatch,
+    EvidenceKind,
+    MatchLevel,
+)
 from citeguard.researcher.schemas import (
     PaperAssessment,
-    RelevanceLevel,
     ResearchSynthesisOutput,
     SearchPlanOutput,
 )
@@ -27,14 +32,18 @@ from citeguard.researcher.schemas import (
 
 class ResearcherActivityTests(unittest.IsolatedAsyncioTestCase):
     @staticmethod
-    def _task(status: SubQuestionStatus = SubQuestionStatus.NEW) -> ResearchTaskInput:
+    def _task(
+        status: SubQuestionStatus = SubQuestionStatus.NEW,
+    ) -> ResearchTaskInput:
         reused_result = None
         source_note_id = None
         if status is SubQuestionStatus.REUSED_FROM_MEMORY:
             reused_result = ResearchResult(
                 answer="A previous answer.",
                 evidence_status=EvidenceStatus.NO_RELEVANT_SOURCES,
-                evidence_reason="The previous search found no relevant sources.",
+                evidence_reason=(
+                    "The previous search found no relevant sources."
+                ),
             )
             source_note_id = "note-001"
         return ResearchTaskInput(
@@ -56,7 +65,7 @@ class ResearcherActivityTests(unittest.IsolatedAsyncioTestCase):
             url="https://arxiv.org/abs/2401.00001",
         )
 
-    async def test_executes_exactly_two_llm_calls_and_one_mcp_search(self) -> None:
+    async def test_executes_two_llm_calls_and_one_mcp_search(self) -> None:
         synthesis = ResearchSynthesisOutput(
             answer="Retrieval improved factuality in the reported evaluation.",
             evidence_status=EvidenceStatus.SUPPORTED,
@@ -65,20 +74,37 @@ class ResearcherActivityTests(unittest.IsolatedAsyncioTestCase):
             assessments=[
                 PaperAssessment(
                     source_id="2401.00001",
-                    relevance=RelevanceLevel.DIRECT,
-                    supported_aspects="The retrieval method and factuality outcome.",
-                    limitations="The abstract does not expose all measurements.",
+                    object_match=MatchLevel.FULL,
+                    problem_match=MatchLevel.FULL,
+                    constraint_match=ConstraintMatch.FULL,
+                    evidence_kind=EvidenceKind.ANSWER_BEARING,
+                    answer_coverage=AnswerCoverage.FULL,
+                    supported_aspects=(
+                        "The retrieval method and factuality outcome."
+                    ),
+                    limitations=(
+                        "The abstract does not expose all measurements."
+                    ),
                 )
             ],
         )
         llm = AsyncMock(
-            side_effect=[SearchPlanOutput(queries=["retrieval factuality"]), synthesis]
+            side_effect=[
+                SearchPlanOutput(queries=["retrieval factuality"]),
+                synthesis,
+            ]
         )
         mcp_search = AsyncMock(return_value=[self._paper()])
 
         with (
-            patch("citeguard.researcher.activity.request_structured_output", llm),
-            patch("citeguard.researcher.activity.search_arxiv_candidates", mcp_search),
+            patch(
+                "citeguard.researcher.activity.request_structured_output",
+                llm,
+            ),
+            patch(
+                "citeguard.researcher.activity.search_arxiv_candidates",
+                mcp_search,
+            ),
         ):
             result = await research_sub_question(self._task())
 
@@ -90,20 +116,28 @@ class ResearcherActivityTests(unittest.IsolatedAsyncioTestCase):
         )
         self.assertIs(result.evidence_status, EvidenceStatus.SUPPORTED)
 
-    async def test_no_candidates_still_uses_second_llm_call_for_explanation(self) -> None:
+    async def test_no_candidates_still_uses_second_llm_call(self) -> None:
         synthesis = ResearchSynthesisOutput(
             answer="The search returned no candidate papers.",
             evidence_status=EvidenceStatus.NO_RELEVANT_SOURCES,
-            evidence_reason="arXiv returned no candidates for the bounded queries.",
+            evidence_reason=(
+                "arXiv returned no candidates for the bounded queries."
+            ),
             used_source_ids=[],
             assessments=[],
         )
         llm = AsyncMock(
-            side_effect=[SearchPlanOutput(queries=["rare research topic"]), synthesis]
+            side_effect=[
+                SearchPlanOutput(queries=["rare research topic"]),
+                synthesis,
+            ]
         )
 
         with (
-            patch("citeguard.researcher.activity.request_structured_output", llm),
+            patch(
+                "citeguard.researcher.activity.request_structured_output",
+                llm,
+            ),
             patch(
                 "citeguard.researcher.activity.search_arxiv_candidates",
                 new=AsyncMock(return_value=[]),
@@ -112,16 +146,19 @@ class ResearcherActivityTests(unittest.IsolatedAsyncioTestCase):
             result = await research_sub_question(self._task())
 
         self.assertEqual(llm.await_count, 2)
-        self.assertIs(result.evidence_status, EvidenceStatus.NO_RELEVANT_SOURCES)
+        self.assertIs(
+            result.evidence_status,
+            EvidenceStatus.NO_RELEVANT_SOURCES,
+        )
         self.assertIn("no candidates", result.evidence_reason.lower())
 
-    async def test_reused_subquestion_is_rejected_before_external_calls(self) -> None:
+    async def test_reused_subquestion_is_rejected_early(self) -> None:
         with self.assertRaises(ApplicationError):
             await research_sub_question(
                 self._task(SubQuestionStatus.REUSED_FROM_MEMORY)
             )
 
-    async def test_verifier_feedback_is_an_explicit_capability_gate(self) -> None:
+    async def test_verifier_feedback_is_a_capability_gate(self) -> None:
         task = ResearchTaskInput(
             sub_question=self._task().sub_question,
             verifier_feedback="Find evidence for the missing population.",

@@ -5,9 +5,14 @@ import unittest
 from citeguard.domain.research import EvidenceStatus
 from citeguard.researcher.arxiv import ArxivPaper
 from citeguard.researcher.assembly import assemble_research_result
+from citeguard.researcher.relevance import (
+    AnswerCoverage,
+    ConstraintMatch,
+    EvidenceKind,
+    MatchLevel,
+)
 from citeguard.researcher.schemas import (
     PaperAssessment,
-    RelevanceLevel,
     ResearchSynthesisOutput,
 )
 
@@ -26,7 +31,11 @@ class ResearcherAssemblyTests(unittest.TestCase):
     def _assessment(source_id: str = "2401.00001") -> PaperAssessment:
         return PaperAssessment(
             source_id=source_id,
-            relevance=RelevanceLevel.DIRECT,
+            object_match=MatchLevel.FULL,
+            problem_match=MatchLevel.FULL,
+            constraint_match=ConstraintMatch.FULL,
+            evidence_kind=EvidenceKind.ANSWER_BEARING,
+            answer_coverage=AnswerCoverage.FULL,
             supported_aspects="The method and factuality outcome.",
             limitations="Evidence is limited to the abstract.",
         )

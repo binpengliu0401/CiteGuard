@@ -41,7 +41,10 @@ class ResearcherPromptTests(unittest.TestCase):
             )
 
     def test_synthesis_prompt_contains_the_six_relevance_criteria(self) -> None:
-        system_prompt = build_synthesis_prompt("Question", [self._paper()])[0][1]
+        system_prompt = build_synthesis_prompt(
+            "Question",
+            [self._paper()],
+        )[0][1]
 
         for expected in (
             "research object",
@@ -53,15 +56,34 @@ class ResearcherPromptTests(unittest.TestCase):
         ):
             self.assertIn(expected, system_prompt)
 
+        for factor in (
+            "`object_match`",
+            "`problem_match`",
+            "`constraint_match`",
+            "`evidence_kind`",
+            "`answer_coverage`",
+        ):
+            self.assertIn(factor, system_prompt)
+
+        self.assertIn(
+            "Project code derives the final relevance label",
+            system_prompt,
+        )
+
     def test_runtime_prompts_are_english_only(self) -> None:
-        messages = build_search_plan_prompt("Does retrieval improve factuality?")
+        messages = build_search_plan_prompt(
+            "Does retrieval improve factuality?"
+        )
         messages += build_synthesis_prompt(
             "Does retrieval improve factuality?",
             [self._paper()],
         )
 
         self.assertIsNone(
-            re.search(r"[\u4e00-\u9fff]", "\n".join(text for _, text in messages))
+            re.search(
+                r"[\u4e00-\u9fff]",
+                "\n".join(text for _, text in messages),
+            )
         )
 
 

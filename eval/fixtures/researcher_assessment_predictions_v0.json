@@ -1,0 +1,103 @@
+{
+  "dataset_id": "researcher-assessment-pilot",
+  "dataset_version": "0.4.0-draft",
+  "system_id": "controlled-review-fixture",
+  "predictions": [
+    {
+      "item_id": "scifact-task__scifact",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full"
+    },
+    {
+      "item_id": "scifact-task__multivers",
+      "object_match": "partial",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "scifact-task__fever",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-task__sbert",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "none",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-record__scifact",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full"
+    },
+    {
+      "item_id": "scifact-record__multivers",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-record__fever",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-record__sbert",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "none",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-baselines__scifact",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "full"
+    },
+    {
+      "item_id": "scifact-baselines__multivers",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-baselines__fever",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "scifact-baselines__sbert",
+      "object_match": "partial",
+      "problem_match": "partial",
+      "constraint_match": "not_applicable",
+      "evidence_kind": "unknown",
+      "answer_coverage": "none"
+    }
+  ]
+}

@@ -68,7 +68,8 @@ async def search_arxiv_candidates(
 
     Raises:
         ArxivMcpPermanentError: If input or successful Tool output is malformed.
-        ArxivMcpTransientError: If the subprocess, transport, or Tool call fails.
+        ArxivMcpTransientError: If the subprocess, transport, or Tool call
+            fails.
 
     Side effects:
         Starts the local MCP server and performs arXiv network requests.
@@ -81,7 +82,10 @@ async def search_arxiv_candidates(
     )
 
     try:
-        async with stdio_client(server) as (read, write):  # type: ignore[arg-type]
+        async with stdio_client(server) as (
+            read,
+            write,
+        ):  # type: ignore[arg-type]
             async with ClientSession(read, write) as session:
                 await session.initialize()
                 results = await asyncio.gather(
@@ -116,11 +120,19 @@ async def search_arxiv_candidates(
     return papers
 
 
-def _validate_search_input(queries: list[str], max_results_per_query: int) -> None:
+def _validate_search_input(
+    queries: list[str],
+    max_results_per_query: int,
+) -> None:
     """Validate bounds before starting an external process."""
 
-    if not isinstance(queries, list) or not 1 <= len(queries) <= MAX_SEARCH_QUERIES:
-        raise ArxivMcpPermanentError("queries must contain between 1 and 5 items")
+    if (
+        not isinstance(queries, list)
+        or not 1 <= len(queries) <= MAX_SEARCH_QUERIES
+    ):
+        raise ArxivMcpPermanentError(
+            "queries must contain between 1 and 5 items"
+        )
     keys: set[str] = set()
     for query in queries:
         if not isinstance(query, str) or not query.strip():
@@ -155,7 +167,9 @@ def _parse_tool_result(result: Any) -> list[ArxivPaper]:
     """
 
     if not isinstance(result, CallToolResult):
-        raise ArxivMcpPermanentError("arXiv Tool returned an unsupported result type")
+        raise ArxivMcpPermanentError(
+            "arXiv Tool returned an unsupported result type"
+        )
     if result.is_error:
         raise ArxivMcpTransientError("arXiv Tool reported an execution error")
 
@@ -166,7 +180,9 @@ def _parse_tool_result(result: Any) -> list[ArxivPaper]:
             payload = payload["result"]
     else:
         text_blocks = [
-            block.text for block in result.content if isinstance(block, TextContent)
+            block.text
+            for block in result.content
+            if isinstance(block, TextContent)
         ]
         if len(text_blocks) != 1:
             raise ArxivMcpPermanentError(

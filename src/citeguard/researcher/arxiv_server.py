@@ -13,7 +13,10 @@ mcp = MCPServer("citeguard-arxiv")
 
 
 @mcp.tool()
-async def search_arxiv(query: str, max_results: int = 5) -> list[dict[str, str]]:
+async def search_arxiv(
+    query: str,
+    max_results: int = 5,
+) -> list[dict[str, str]]:
     """Search arXiv for candidate papers matching a keyword query.
 
     Use this tool when a research task requires candidate academic papers from

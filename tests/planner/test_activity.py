@@ -54,8 +54,12 @@ class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
                             ResearchSource(
                                 title="Agent systems",
                                 url="https://arxiv.org/abs/2401.00001",
-                                supported_aspects="The definition of agent systems.",
-                                limitations="The paper covers one agent architecture.",
+                                supported_aspects=(
+                                    "The definition of agent systems."
+                                ),
+                                limitations=(
+                                    "The paper covers one agent architecture."
+                                ),
                                 source_id="2401.00001",
                             )
                         ],
