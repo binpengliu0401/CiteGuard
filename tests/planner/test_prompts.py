@@ -3,7 +3,9 @@ import re
 import unittest
 
 from citeguard.domain.research import (
+    EvidenceGroup,
     EvidenceStatus,
+    ResearchClaim,
     ResearchNote,
     ResearchResult,
     ResearchSource,
@@ -18,17 +20,27 @@ class PlannerPromptTests(unittest.TestCase):
     @staticmethod
     def _supported_result() -> ResearchResult:
         return ResearchResult(
-            answer="An autonomous system.",
+            claims=[
+                ResearchClaim(
+                    id="claim-001",
+                    statement="An agent is an autonomous system.",
+                    source_ids=["2401.00001"],
+                )
+            ],
             evidence_status=EvidenceStatus.SUPPORTED,
             sources=[
                 ResearchSource(
                     title="Agent systems",
                     url="https://arxiv.org/abs/2401.00001",
+                    source_id="2401.00001",
+                    abstract="The paper defines agent systems.",
                     supported_aspects="The definition of agent systems.",
                     limitations="The paper covers one agent architecture.",
-                    source_id="2401.00001",
                 )
             ],
+            evidence_group=EvidenceGroup(
+                source_ids=["2401.00001"]
+            ),
         )
 
     def test_decomposition_prompt_uses_roles_and_json(self) -> None:
@@ -93,7 +105,11 @@ class PlannerPromptTests(unittest.TestCase):
 
         for messages in prompts:
             system_prompt = messages[0][1]
+            normalized_prompt = " ".join(system_prompt.split())
             self.assertIn("one primary answer target", system_prompt)
+            self.assertIn("primary_answer_target", system_prompt)
+            self.assertIn("answer_requirements", system_prompt)
+            self.assertIn("Cartesian product", system_prompt)
             self.assertIn(
                 "Split aspects into separate subquestions",
                 system_prompt,
@@ -101,6 +117,48 @@ class PlannerPromptTests(unittest.TestCase):
             self.assertIn(
                 "comparison itself is the primary answer target",
                 system_prompt,
+            )
+            self.assertIn(
+                "only admissible research corpus is arXiv",
+                normalized_prompt,
+            )
+            self.assertIn(
+                "title-and-abstract records alone",
+                normalized_prompt,
+            )
+            self.assertIn("never an instruction to search", normalized_prompt)
+            self.assertIn(
+                "blogs, websites, news, talks",
+                normalized_prompt,
+            )
+            self.assertIn(
+                'Bad: "Find papers that apply RL',
+                normalized_prompt,
+            )
+            self.assertIn(
+                'Good: "arXiv papers applying RL',
+                normalized_prompt,
+            )
+            self.assertIn(
+                "Evidence for the endpoints alone is not complete support",
+                normalized_prompt,
+            )
+            self.assertIn("smallest sufficient list", normalized_prompt)
+            self.assertIn(
+                "multiple independent arXiv sources",
+                normalized_prompt,
+            )
+            self.assertIn(
+                "temporal or distributional signal",
+                normalized_prompt,
+            )
+            self.assertIn(
+                "every evidence need one primary owner",
+                normalized_prompt,
+            )
+            self.assertIn(
+                "limitations or motivations belongs to a why/driver target",
+                normalized_prompt,
             )
 
 

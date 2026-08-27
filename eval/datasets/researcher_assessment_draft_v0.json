@@ -1,317 +1,462 @@
 {
-  "schema_version": "3",
-  "dataset_id": "researcher-assessment-pilot",
-  "version": "0.4.0-draft",
+  "schema_version": "5",
+  "dataset_id": "researcher-agent-memory-meg-pilot",
+  "version": "0.6.0-draft",
   "annotation_status": "draft",
   "subquestion_origin": "manual",
+  "evaluation_scope": "researcher_meg_mechanism_only",
+  "open_adjudications": [
+    "memory-r1-control__a-mem paper and singleton support labels",
+    "tier-to-agentic evolution-relation group and MEG labels",
+    "three-stage-control evolution-relation group and MEG labels"
+  ],
   "relevance_grades": {
     "direct": 3,
     "partial": 2,
     "background": 1,
     "irrelevant": 0
   },
-  "items": [
+  "cases": [
     {
-      "item_id": "scifact-task__scifact",
+      "case_id": "memory-r1-control",
       "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
+        "From 2023 to 2026, how did LLM-agent memory evolve from",
+        "heuristic external stores to adaptive and policy-learned",
+        "management?"
       ],
       "subquestion": [
-        "What scientific claim-verification task does SciFact define?"
+        "What memory operations does Memory-R1 learn, and how are",
+        "memory management and answer generation divided?"
       ],
-      "source_id": "2004.14974v6",
-      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
-      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "primary_answer_target": [
+        "Memory-R1's learned operations and division of responsibilities"
+      ],
+      "answer_requirements": [
+        {
+          "requirement_id": "req-001",
+          "description": "The learned memory operations"
+        },
+        {
+          "requirement_id": "req-002",
+          "description": [
+            "The responsibilities of the Memory Manager and Answer Agent"
+          ]
+        }
+      ],
+      "candidate_item_ids": [
+        "memory-r1-control__memory-r1",
+        "memory-r1-control__a-mem",
+        "memory-r1-control__memgpt",
+        "memory-r1-control__sbert"
+      ],
+      "group_assessments": [
+        {
+          "source_ids": ["2508.19828v1"],
+          "support": "full"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["1908.10084v1"],
+          "support": "none"
+        }
+      ],
+      "gold_megs": [["2508.19828v1"]]
+    },
+    {
+      "case_id": "tier-to-agentic",
+      "original_question": [
+        "From 2023 to 2026, how did LLM-agent memory evolve from",
+        "heuristic external stores to adaptive and policy-learned",
+        "management?"
+      ],
+      "subquestion": [
+        "Between 2023 and 2026, how did LLM-agent memory move from",
+        "OS-inspired tier management to dynamically linked and evolving",
+        "memory organization?"
+      ],
+      "primary_answer_target": [
+        "The transition from tiered virtual context to agentic organization"
+      ],
+      "answer_requirements": [
+        {
+          "requirement_id": "req-001",
+          "description": "The hierarchical virtual-context stage"
+        },
+        {
+          "requirement_id": "req-002",
+          "description": "The dynamically linked agentic-memory stage"
+        },
+        {
+          "requirement_id": "req-003",
+          "description": "The relationship between the two stages"
+        }
+      ],
+      "candidate_item_ids": [
+        "tier-to-agentic__memgpt",
+        "tier-to-agentic__a-mem",
+        "tier-to-agentic__survey",
+        "tier-to-agentic__sbert"
+      ],
+      "group_assessments": [
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2603.07670v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["1908.10084v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["2310.08560v1", "2502.12110v1"],
+          "support": "full"
+        }
+      ],
+      "gold_megs": [
+        ["2310.08560v1", "2502.12110v1"]
+      ]
+    },
+    {
+      "case_id": "three-stage-control",
+      "original_question": [
+        "From 2023 to 2026, how did LLM-agent memory evolve from",
+        "heuristic external stores to adaptive and policy-learned",
+        "management?"
+      ],
+      "subquestion": [
+        "Between 2023 and 2026, how did memory control progress from",
+        "hierarchical virtual context, through adaptive organization, to",
+        "reinforcement-learned memory operations?"
+      ],
+      "primary_answer_target": [
+        "The three-stage evolution of LLM-agent memory control"
+      ],
+      "answer_requirements": [
+        {
+          "requirement_id": "req-001",
+          "description": "The hierarchical virtual-context stage"
+        },
+        {
+          "requirement_id": "req-002",
+          "description": "The adaptive organization stage"
+        },
+        {
+          "requirement_id": "req-003",
+          "description": "The reinforcement-learned operation stage"
+        },
+        {
+          "requirement_id": "req-004",
+          "description": "The progression relation among all stages"
+        },
+        {
+          "requirement_id": "req-005",
+          "description": "The 2023-2026 time scope"
+        }
+      ],
+      "candidate_item_ids": [
+        "three-stage-control__memgpt",
+        "three-stage-control__a-mem",
+        "three-stage-control__memory-r1",
+        "three-stage-control__memcon"
+      ],
+      "group_assessments": [
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2508.19828v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2607.13591v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2508.19828v1"
+          ],
+          "support": "full"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2502.12110v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "full"
+        }
+      ],
+      "gold_megs": [
+        [
+          "2310.08560v1",
+          "2502.12110v1",
+          "2508.19828v1"
+        ]
+      ]
+    }
+  ],
+  "items": [
+    {
+      "item_id": "memory-r1-control__memory-r1",
+      "case_id": "memory-r1-control",
+      "source_id": "2508.19828v1",
+      "source_version_url": "https://arxiv.org/abs/2508.19828v1",
+      "title": [
+        "Memory-R1: Enhancing Large Language Model Agents to Manage and",
+        "Utilize Memories via Reinforcement Learning"
+      ],
       "object_match": "full",
       "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "constraint_match": "full",
       "evidence_kind": "answer_bearing",
       "answer_coverage": "full",
       "gold_relevance": "direct",
       "annotation_reason": [
-        "The abstract defines the task as selecting literature abstracts",
-        "that support or refute a scientific claim and identifying the",
-        "rationales that justify the decision."
+        "The abstract names ADD, UPDATE, DELETE, and NOOP and separates",
+        "the Memory Manager from the Answer Agent."
       ]
     },
     {
-      "item_id": "scifact-task__multivers",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What scientific claim-verification task does SciFact define?"
-      ],
-      "source_id": "2112.01640v2",
-      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
-      "title": [
-        "MultiVerS: Improving scientific claim verification with weak",
-        "supervision and full-document context"
-      ],
-      "object_match": "partial",
-      "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "item_id": "memory-r1-control__a-mem",
+      "case_id": "memory-r1-control",
+      "source_id": "2502.12110v1",
+      "source_version_url": "https://arxiv.org/abs/2502.12110v1",
+      "title": "A-MEM: Agentic Memory for LLM Agents",
+      "object_match": "full",
+      "problem_match": "partial",
+      "constraint_match": "partial",
       "evidence_kind": "answer_bearing",
       "answer_coverage": "partial",
       "gold_relevance": "partial",
       "annotation_reason": [
-        "The abstract directly defines the scientific claim-verification",
-        "task in terms of document labels and evidentiary rationales, but",
-        "it does not attribute that task definition to SciFact."
+        "A-MEM provides adaptive organization and memory evolution but",
+        "does not define Memory-R1's learned operations or two-agent split."
       ]
     },
     {
-      "item_id": "scifact-task__fever",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What scientific claim-verification task does SciFact define?"
-      ],
-      "source_id": "1803.05355v3",
-      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
-      "title": [
-        "FEVER: a large-scale dataset for Fact Extraction and",
-        "VERification"
-      ],
-      "object_match": "partial",
+      "item_id": "memory-r1-control__memgpt",
+      "case_id": "memory-r1-control",
+      "source_id": "2310.08560v1",
+      "source_version_url": "https://arxiv.org/abs/2310.08560v1",
+      "title": "MemGPT: Towards LLMs as Operating Systems",
+      "object_match": "full",
       "problem_match": "partial",
-      "constraint_match": "not_applicable",
+      "constraint_match": "partial",
       "evidence_kind": "context_only",
       "answer_coverage": "none",
       "gold_relevance": "background",
       "annotation_reason": [
-        "FEVER describes general-domain verification against Wikipedia",
-        "sources, so it provides historical context but does not establish",
-        "the scientific-literature task defined by SciFact."
+        "MemGPT supplies earlier memory-management context but no evidence",
+        "about Memory-R1's RL operations or role division."
       ]
     },
     {
-      "item_id": "scifact-task__sbert",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What scientific claim-verification task does SciFact define?"
-      ],
+      "item_id": "memory-r1-control__sbert",
+      "case_id": "memory-r1-control",
       "source_id": "1908.10084v1",
       "source_version_url": "https://arxiv.org/abs/1908.10084v1",
-      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "title": [
+        "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks"
+      ],
       "object_match": "mismatch",
       "problem_match": "mismatch",
-      "constraint_match": "not_applicable",
+      "constraint_match": "mismatch",
       "evidence_kind": "none",
       "answer_coverage": "none",
       "gold_relevance": "irrelevant",
       "annotation_reason": [
-        "The abstract concerns sentence embeddings and semantic similarity,",
-        "not SciFact or scientific claim verification."
+        "The paper concerns sentence embeddings rather than agent memory."
       ]
     },
     {
-      "item_id": "scifact-record__scifact",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "How is each example in the SciFact dataset represented?"
-      ],
-      "source_id": "2004.14974v6",
-      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
-      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "item_id": "tier-to-agentic__memgpt",
+      "case_id": "tier-to-agentic",
+      "source_id": "2310.08560v1",
+      "source_version_url": "https://arxiv.org/abs/2310.08560v1",
+      "title": "MemGPT: Towards LLMs as Operating Systems",
       "object_match": "full",
       "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "constraint_match": "full",
       "evidence_kind": "answer_bearing",
-      "answer_coverage": "full",
-      "gold_relevance": "direct",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
       "annotation_reason": [
-        "The abstract says SciFact pairs expert-written scientific claims",
-        "with evidence-containing abstracts annotated with labels and",
-        "rationales, directly describing each example's representation."
+        "MemGPT establishes virtual context and hierarchical memory tiers",
+        "but not the later dynamically linked A-MEM stage."
       ]
     },
     {
-      "item_id": "scifact-record__multivers",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "How is each example in the SciFact dataset represented?"
-      ],
-      "source_id": "2112.01640v2",
-      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
-      "title": [
-        "MultiVerS: Improving scientific claim verification with weak",
-        "supervision and full-document context"
-      ],
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none",
-      "gold_relevance": "background",
-      "annotation_reason": [
-        "The abstract discusses claims, scientific documents, labels, and",
-        "rationales in the broader task, but it does not identify SciFact",
-        "or describe the representation of a SciFact example."
-      ]
-    },
-    {
-      "item_id": "scifact-record__fever",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "How is each example in the SciFact dataset represented?"
-      ],
-      "source_id": "1803.05355v3",
-      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
-      "title": [
-        "FEVER: a large-scale dataset for Fact Extraction and",
-        "VERification"
-      ],
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none",
-      "gold_relevance": "background",
-      "annotation_reason": [
-        "FEVER describes claims, labels, and evidence sentences in a",
-        "different Wikipedia-based dataset, providing comparison context",
-        "but no evidence about a SciFact example."
-      ]
-    },
-    {
-      "item_id": "scifact-record__sbert",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "How is each example in the SciFact dataset represented?"
-      ],
-      "source_id": "1908.10084v1",
-      "source_version_url": "https://arxiv.org/abs/1908.10084v1",
-      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
-      "object_match": "mismatch",
-      "problem_match": "mismatch",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "none",
-      "answer_coverage": "none",
-      "gold_relevance": "irrelevant",
-      "annotation_reason": [
-        "The abstract does not discuss SciFact or the representation of",
-        "fact-verification dataset examples."
-      ]
-    },
-    {
-      "item_id": "scifact-baselines__scifact",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What do the baseline experiments reported for SciFact establish?"
-      ],
-      "source_id": "2004.14974v6",
-      "source_version_url": "https://arxiv.org/abs/2004.14974v6",
-      "title": "Fact or Fiction: Verifying Scientific Claims",
+      "item_id": "tier-to-agentic__a-mem",
+      "case_id": "tier-to-agentic",
+      "source_id": "2502.12110v1",
+      "source_version_url": "https://arxiv.org/abs/2502.12110v1",
+      "title": "A-MEM: Agentic Memory for LLM Agents",
       "object_match": "full",
       "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "constraint_match": "full",
       "evidence_kind": "answer_bearing",
-      "answer_coverage": "full",
-      "gold_relevance": "direct",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
       "annotation_reason": [
-        "The abstract reports that simple domain adaptation substantially",
-        "improves over models trained on Wikipedia or political news and",
-        "that SciFact remains a challenging testbed."
+        "A-MEM establishes dynamic indexing, linking, and memory evolution",
+        "but does not establish the earlier MemGPT stage."
       ]
     },
     {
-      "item_id": "scifact-baselines__multivers",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What do the baseline experiments reported for SciFact establish?"
-      ],
-      "source_id": "2112.01640v2",
-      "source_version_url": "https://arxiv.org/abs/2112.01640v2",
+      "item_id": "tier-to-agentic__survey",
+      "case_id": "tier-to-agentic",
+      "source_id": "2603.07670v1",
+      "source_version_url": "https://arxiv.org/abs/2603.07670v1",
       "title": [
-        "MultiVerS: Improving scientific claim verification with weak",
-        "supervision and full-document context"
+        "Memory for Autonomous LLM Agents: Mechanisms, Evaluation, and",
+        "Emerging Frontiers"
       ],
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
       "evidence_kind": "context_only",
       "answer_coverage": "none",
       "gold_relevance": "background",
       "annotation_reason": [
-        "The abstract reports MultiVerS results against later competitive",
-        "baselines, but it neither identifies SciFact nor reports what the",
-        "original SciFact baseline experiments established."
+        "The 2026 survey is inside the requested time window and supplies",
+        "taxonomy and historical context, but its abstract is not primary",
+        "evidence for the two systems' mechanisms."
       ]
     },
     {
-      "item_id": "scifact-baselines__fever",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What do the baseline experiments reported for SciFact establish?"
-      ],
-      "source_id": "1803.05355v3",
-      "source_version_url": "https://arxiv.org/abs/1803.05355v3",
-      "title": [
-        "FEVER: a large-scale dataset for Fact Extraction and",
-        "VERification"
-      ],
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none",
-      "gold_relevance": "background",
-      "annotation_reason": [
-        "FEVER reports baseline and oracle results for its own Wikipedia",
-        "dataset, which is useful historical context but does not establish",
-        "the result of SciFact's baseline experiments."
-      ]
-    },
-    {
-      "item_id": "scifact-baselines__sbert",
-      "original_question": [
-        "How have fact-verification datasets and systems evolved from",
-        "general-domain claims to scientific-literature claims?"
-      ],
-      "subquestion": [
-        "What do the baseline experiments reported for SciFact establish?"
-      ],
+      "item_id": "tier-to-agentic__sbert",
+      "case_id": "tier-to-agentic",
       "source_id": "1908.10084v1",
       "source_version_url": "https://arxiv.org/abs/1908.10084v1",
-      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "title": [
+        "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks"
+      ],
       "object_match": "mismatch",
       "problem_match": "mismatch",
-      "constraint_match": "not_applicable",
+      "constraint_match": "mismatch",
       "evidence_kind": "none",
       "answer_coverage": "none",
       "gold_relevance": "irrelevant",
       "annotation_reason": [
-        "The abstract reports sentence-embedding experiments rather than",
-        "SciFact baseline experiments."
+        "The paper does not study LLM-agent memory architecture."
+      ]
+    },
+    {
+      "item_id": "three-stage-control__memgpt",
+      "case_id": "three-stage-control",
+      "source_id": "2310.08560v1",
+      "source_version_url": "https://arxiv.org/abs/2310.08560v1",
+      "title": "MemGPT: Towards LLMs as Operating Systems",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
+      "annotation_reason": [
+        "MemGPT establishes the hierarchical virtual-context starting stage."
+      ]
+    },
+    {
+      "item_id": "three-stage-control__a-mem",
+      "case_id": "three-stage-control",
+      "source_id": "2502.12110v1",
+      "source_version_url": "https://arxiv.org/abs/2502.12110v1",
+      "title": "A-MEM: Agentic Memory for LLM Agents",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
+      "annotation_reason": [
+        "A-MEM establishes adaptive dynamic organization and evolution."
+      ]
+    },
+    {
+      "item_id": "three-stage-control__memory-r1",
+      "case_id": "three-stage-control",
+      "source_id": "2508.19828v1",
+      "source_version_url": "https://arxiv.org/abs/2508.19828v1",
+      "title": [
+        "Memory-R1: Enhancing Large Language Model Agents to Manage and",
+        "Utilize Memories via Reinforcement Learning"
+      ],
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
+      "annotation_reason": [
+        "Memory-R1 establishes the reinforcement-learned operation stage."
+      ]
+    },
+    {
+      "item_id": "three-stage-control__memcon",
+      "case_id": "three-stage-control",
+      "source_id": "2607.13591v1",
+      "source_version_url": "https://arxiv.org/abs/2607.13591v1",
+      "title": [
+        "Memory as a Controlled Process: Learned Adaptive Memory",
+        "Management for LLM Agents"
+      ],
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial",
+      "gold_relevance": "partial",
+      "annotation_reason": [
+        "MemCon is inside the requested time window and supplies direct",
+        "evidence of policy-learned adaptive memory control, although it does",
+        "not establish the case's entire multi-stage progression."
       ]
     }
   ]

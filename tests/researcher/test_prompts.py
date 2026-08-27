@@ -1,90 +1,89 @@
-"""Verify Researcher runtime Prompt structure and trust boundaries."""
+"""Verify Researcher prompt boundaries and fixed-target data."""
 
 import json
-import re
 import unittest
 
+from citeguard.domain.research import (
+    AnswerRequirement,
+    SubQuestion,
+    SubQuestionStatus,
+)
 from citeguard.researcher.arxiv import ArxivPaper
+from citeguard.researcher.meg import ClaimCandidate
 from citeguard.researcher.prompts import (
+    build_evidence_analysis_prompt,
+    build_group_support_prompt,
     build_search_plan_prompt,
-    build_synthesis_prompt,
 )
 
 
 class ResearcherPromptTests(unittest.TestCase):
     @staticmethod
+    def _subquestion() -> SubQuestion:
+        return SubQuestion(
+            id="sq-001",
+            question="How does retrieval affect factuality?",
+            primary_answer_target="Retrieval effects on factuality",
+            answer_requirements=[
+                AnswerRequirement(
+                    id="req-001",
+                    description="A retrieval method and factuality outcome",
+                )
+            ],
+            status=SubQuestionStatus.NEW,
+        )
+
+    @staticmethod
     def _paper() -> ArxivPaper:
         return ArxivPaper(
             title="Retrieval and factuality",
             source_id="2401.00001",
-            summary="We evaluate retrieval in a controlled setting.",
+            summary="We report improved factuality.",
             url="https://arxiv.org/abs/2401.00001",
         )
 
-    def test_prompts_use_structured_sections_and_json_data(self) -> None:
-        prompts = [
-            build_search_plan_prompt("Does retrieval improve factuality?"),
-            build_synthesis_prompt(
-                "Does retrieval improve factuality?",
-                [self._paper()],
-            ),
+    def test_search_prompt_contains_fixed_answer_contract(self) -> None:
+        messages = build_search_plan_prompt(self._subquestion())
+        payload = json.loads(messages[1][1].split("\n", maxsplit=1)[1])
+
+        self.assertEqual(
+            payload["primary_answer_target"],
+            "Retrieval effects on factuality",
+        )
+        self.assertEqual(
+            payload["answer_requirements"][0]["requirement_id"],
+            "req-001",
+        )
+
+    def test_analysis_prompt_forbids_free_form_answer(self) -> None:
+        messages = build_evidence_analysis_prompt(
+            self._subquestion(),
+            [self._paper()],
+        )
+        system_prompt = messages[0][1]
+
+        self.assertIn("frozen candidate ClaimSet", system_prompt)
+        self.assertIn("Do not write a\nfree-form answer", system_prompt)
+
+    def test_group_prompt_keeps_claims_and_groups_fixed(self) -> None:
+        claims = [
+            ClaimCandidate(
+                id="claim-001",
+                statement="Retrieval improved factuality.",
+                requirement_ids=["req-001"],
+                candidate_source_ids=["2401.00001"],
+            )
         ]
-
-        for messages in prompts:
-            self.assertEqual([role for role, _ in messages], ["system", "user"])
-            for section in ("Role", "Task", "Input", "Rules", "Output"):
-                self.assertIn(f"{section}\n", messages[0][1])
-            payload = json.loads(messages[1][1].split("\n", maxsplit=1)[1])
-            self.assertEqual(
-                payload["sub_question"],
-                "Does retrieval improve factuality?",
-            )
-
-    def test_synthesis_prompt_contains_the_six_relevance_criteria(self) -> None:
-        system_prompt = build_synthesis_prompt(
-            "Question",
-            [self._paper()],
-        )[0][1]
-
-        for expected in (
-            "research object",
-            "problem solved",
-            "method, setting, time, population",
-            "actual method or finding",
-            "exact aspects",
-            "limitations remain",
-        ):
-            self.assertIn(expected, system_prompt)
-
-        for factor in (
-            "`object_match`",
-            "`problem_match`",
-            "`constraint_match`",
-            "`evidence_kind`",
-            "`answer_coverage`",
-        ):
-            self.assertIn(factor, system_prompt)
-
-        self.assertIn(
-            "Project code derives the final relevance label",
-            system_prompt,
-        )
-
-    def test_runtime_prompts_are_english_only(self) -> None:
-        messages = build_search_plan_prompt(
-            "Does retrieval improve factuality?"
-        )
-        messages += build_synthesis_prompt(
-            "Does retrieval improve factuality?",
+        messages = build_group_support_prompt(
+            self._subquestion(),
+            claims,
+            [("2401.00001",)],
             [self._paper()],
         )
+        payload = json.loads(messages[1][1].split("\n", maxsplit=1)[1])
 
-        self.assertIsNone(
-            re.search(
-                r"[\u4e00-\u9fff]",
-                "\n".join(text for _, text in messages),
-            )
-        )
+        self.assertEqual(payload["claims"][0]["claim_id"], "claim-001")
+        self.assertEqual(payload["source_groups"], [["2401.00001"]])
 
 
 if __name__ == "__main__":

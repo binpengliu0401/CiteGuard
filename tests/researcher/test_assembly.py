@@ -1,10 +1,19 @@
-"""Verify deterministic Researcher schema-to-domain assembly."""
+"""Verify Researcher evidence validation and domain assembly."""
 
 import unittest
 
-from citeguard.domain.research import EvidenceStatus
+from citeguard.domain.research import (
+    AnswerRequirement,
+    EvidenceStatus,
+    SubQuestion,
+    SubQuestionStatus,
+)
 from citeguard.researcher.arxiv import ArxivPaper
-from citeguard.researcher.assembly import assemble_research_result
+from citeguard.researcher.assembly import (
+    assemble_insufficient_result,
+    assemble_supported_result,
+    validate_evidence_analysis,
+)
 from citeguard.researcher.relevance import (
     AnswerCoverage,
     ConstraintMatch,
@@ -12,12 +21,31 @@ from citeguard.researcher.relevance import (
     MatchLevel,
 )
 from citeguard.researcher.schemas import (
+    ClaimSupport,
+    EvidenceAnalysisOutput,
+    EvidenceGroupAssessment,
+    GeneratedClaim,
+    GroupSupport,
     PaperAssessment,
-    ResearchSynthesisOutput,
 )
 
 
 class ResearcherAssemblyTests(unittest.TestCase):
+    @staticmethod
+    def _subquestion() -> SubQuestion:
+        return SubQuestion(
+            id="sq-001",
+            question="How does retrieval affect factuality?",
+            primary_answer_target="Retrieval effects on factuality",
+            answer_requirements=[
+                AnswerRequirement(
+                    id="req-001",
+                    description="A retrieval method and factuality outcome",
+                )
+            ],
+            status=SubQuestionStatus.NEW,
+        )
+
     @staticmethod
     def _paper(source_id: str = "2401.00001") -> ArxivPaper:
         return ArxivPaper(
@@ -28,7 +56,9 @@ class ResearcherAssemblyTests(unittest.TestCase):
         )
 
     @staticmethod
-    def _assessment(source_id: str = "2401.00001") -> PaperAssessment:
+    def _assessment(
+        source_id: str = "2401.00001",
+    ) -> PaperAssessment:
         return PaperAssessment(
             source_id=source_id,
             object_match=MatchLevel.FULL,
@@ -40,42 +70,97 @@ class ResearcherAssemblyTests(unittest.TestCase):
             limitations="Evidence is limited to the abstract.",
         )
 
-    def test_maps_only_used_candidate_ids_to_domain_sources(self) -> None:
-        output = ResearchSynthesisOutput(
-            answer="Retrieval improved factuality in the reported evaluation.",
-            evidence_status=EvidenceStatus.SUPPORTED,
-            evidence_reason=None,
-            used_source_ids=["2401.00001"],
+    def test_validates_and_assigns_project_claim_ids(self) -> None:
+        output = EvidenceAnalysisOutput(
             assessments=[self._assessment()],
+            claims=[
+                GeneratedClaim(
+                    statement="Retrieval improved factuality.",
+                    requirement_ids=["req-001"],
+                    candidate_source_ids=["2401.00001"],
+                )
+            ],
+            unmet_requirement_ids=[],
         )
 
-        result = assemble_research_result(output, [self._paper()])
-
-        self.assertEqual(result.sources[0].title, "Retrieval and factuality")
-        self.assertEqual(result.sources[0].source_id, "2401.00001")
-        self.assertEqual(
-            result.sources[0].supported_aspects,
-            "The method and factuality outcome.",
-        )
-        self.assertEqual(
-            result.sources[0].limitations,
-            "Evidence is limited to the abstract.",
+        claims = validate_evidence_analysis(
+            output,
+            [self._paper()],
+            self._subquestion(),
         )
 
-    def test_requires_an_assessment_for_every_candidate(self) -> None:
-        output = ResearchSynthesisOutput(
-            answer="Retrieval improved factuality.",
-            evidence_status=EvidenceStatus.SUPPORTED,
-            evidence_reason=None,
-            used_source_ids=["2401.00001"],
+        self.assertEqual(claims[0].id, "claim-001")
+
+    def test_rejects_unknown_requirement_id(self) -> None:
+        output = EvidenceAnalysisOutput(
             assessments=[self._assessment()],
+            claims=[
+                GeneratedClaim(
+                    statement="Retrieval improved factuality.",
+                    requirement_ids=["req-999"],
+                    candidate_source_ids=["2401.00001"],
+                )
+            ],
+            unmet_requirement_ids=["req-001"],
         )
 
-        with self.assertRaisesRegex(ValueError, "exactly match"):
-            assemble_research_result(
+        with self.assertRaisesRegex(ValueError, "unknown"):
+            validate_evidence_analysis(
                 output,
-                [self._paper(), self._paper("2401.00002")],
+                [self._paper()],
+                self._subquestion(),
             )
+
+    def test_assembles_supported_minimal_group(self) -> None:
+        output = EvidenceAnalysisOutput(
+            assessments=[self._assessment()],
+            claims=[
+                GeneratedClaim(
+                    statement="Retrieval improved factuality.",
+                    requirement_ids=["req-001"],
+                    candidate_source_ids=["2401.00001"],
+                )
+            ],
+            unmet_requirement_ids=[],
+        )
+        claims = validate_evidence_analysis(
+            output,
+            [self._paper()],
+            self._subquestion(),
+        )
+        group = EvidenceGroupAssessment(
+            source_ids=["2401.00001"],
+            support=GroupSupport.FULL,
+            claim_support=[
+                ClaimSupport(
+                    claim_id="claim-001",
+                    source_ids=["2401.00001"],
+                )
+            ],
+            missing_claim_ids=[],
+            missing_requirement_ids=[],
+        )
+
+        result = assemble_supported_result(
+            claims=claims,
+            group=group,
+            assessments=output.assessments,
+            candidates=[self._paper()],
+        )
+
+        self.assertIs(result.evidence_status, EvidenceStatus.SUPPORTED)
+        self.assertEqual(result.sources[0].abstract, self._paper().summary)
+
+    def test_insufficient_result_has_no_evidence_group(self) -> None:
+        result = assemble_insufficient_result(
+            claims=[],
+            unmet_requirement_ids=["req-001"],
+            assessments=[],
+            candidates=[],
+        )
+
+        self.assertIsNone(result.evidence_group)
+        self.assertIn("req-001", result.evidence_reason)
 
 
 if __name__ == "__main__":

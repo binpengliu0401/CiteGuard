@@ -1,6 +1,10 @@
 import unittest
 
-from citeguard.domain.research import SubQuestion, SubQuestionStatus
+from citeguard.domain.research import (
+    AnswerRequirement,
+    SubQuestion,
+    SubQuestionStatus,
+)
 from citeguard.planner.contracts import (
     PlannerActivityInput,
     PlannerActivityOutput,
@@ -38,6 +42,13 @@ class PlannerContractTests(unittest.TestCase):
                 SubQuestion(
                     id="sq-001",
                     question="What is an AI agent?",
+                    primary_answer_target="Definition of an AI agent",
+                    answer_requirements=[
+                        AnswerRequirement(
+                            id="req-001",
+                            description="The defining capabilities",
+                        )
+                    ],
                     status=SubQuestionStatus.NEW,
                 )
             ]

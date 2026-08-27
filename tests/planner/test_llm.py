@@ -36,7 +36,17 @@ class OpenRouterClientTests(unittest.IsolatedAsyncioTestCase):
                                 "content": json.dumps(
                                     {
                                         "items": [
-                                            {"question": "What is an AI agent?"}
+                                            {
+                                                "question": (
+                                                    "What is an AI agent?"
+                                                ),
+                                                "primary_answer_target": (
+                                                    "Definition of an AI agent"
+                                                ),
+                                                "answer_requirements": [
+                                                    "Defining capabilities"
+                                                ],
+                                            }
                                         ]
                                     }
                                 )
@@ -82,14 +92,22 @@ class OpenRouterClientTests(unittest.IsolatedAsyncioTestCase):
                 200,
                 json={
                     "choices": [
-                        {"message": {"content": json.dumps({"items": []})}}
+                        {
+                            "finish_reason": "length",
+                            "message": {
+                                "content": json.dumps({"items": []})
+                            },
+                        }
                     ]
                 },
             )
         )
 
         async with httpx.AsyncClient(transport=transport) as client:
-            with self.assertRaises(OpenRouterPermanentError):
+            with self.assertRaisesRegex(
+                OpenRouterPermanentError,
+                "finish_reason=length",
+            ):
                 await request_structured_output(
                     [("user", "Plan research.")],
                     DecompositionOutput,

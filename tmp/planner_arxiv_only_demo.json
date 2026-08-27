@@ -1,0 +1,95 @@
+{
+  "text_format": "Join text-array segments with single spaces.",
+  "research_question": [
+    "I keep hearing that LLM agents are moving away from just dumping",
+    "everything into a vector store toward more structured memory",
+    "management — is that actually true, and if so, what's driving it?",
+    "I'm especially curious whether reinforcement learning is being used",
+    "to teach agents when to update or delete old memories."
+  ],
+  "session_id": "planner-arxiv-policy-demo",
+  "sub_questions": [
+    {
+      "id": "sq-001",
+      "question": [
+        "Is there evidence in recent arXiv papers of a shift from simple",
+        "vector store memory to more structured memory management in LLM",
+        "agents?"
+      ],
+      "primary_answer_target": [
+        "The existence of a trend toward structured memory management in",
+        "LLM agent research"
+      ],
+      "answer_requirements": [
+        {
+          "id": "req-001",
+          "description": [
+            "Papers that discuss limitations of vector store memory"
+          ]
+        },
+        {
+          "id": "req-002",
+          "description": [
+            "Papers that propose structured memory architectures (e.g.,",
+            "hierarchical, relational, episodic) for LLM agents"
+          ]
+        }
+      ],
+      "status": "new"
+    },
+    {
+      "id": "sq-002",
+      "question": [
+        "What are the reported motivations for adopting structured memory",
+        "management in LLM agents?"
+      ],
+      "primary_answer_target": [
+        "The driving factors or reasons for moving to structured memory",
+        "management"
+      ],
+      "answer_requirements": [
+        {
+          "id": "req-001",
+          "description": [
+            "Motivations such as improved reasoning, long-term coherence,",
+            "efficiency, or scalability"
+          ]
+        },
+        {
+          "id": "req-002",
+          "description": [
+            "References to specific challenges with vector store memory",
+            "that motivate structured approaches"
+          ]
+        }
+      ],
+      "status": "new"
+    },
+    {
+      "id": "sq-003",
+      "question": [
+        "Are there papers that use reinforcement learning to decide when",
+        "to update or delete memories in LLM agents?"
+      ],
+      "primary_answer_target": [
+        "The use of reinforcement learning for memory update/delete",
+        "decisions in LLM agents"
+      ],
+      "answer_requirements": [
+        {
+          "id": "req-001",
+          "description": [
+            "Papers that apply RL to memory management policies"
+          ]
+        },
+        {
+          "id": "req-002",
+          "description": [
+            "Details on how RL is used for memory update or deletion"
+          ]
+        }
+      ],
+      "status": "new"
+    }
+  ]
+}

@@ -28,6 +28,7 @@ htmlcov/
 *.md
 !/README.md
 /docs/
+/讨论与设计决策记录.md
 /CiteGuard_Architecture_and_Code_Guide.pdf
 
 # Private learning and technical-validation spikes

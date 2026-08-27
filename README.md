@@ -41,16 +41,34 @@ flowchart LR
 
 - validated Planner Activity input and output contracts;
 - strict structured-output schemas for Planner model responses;
+- arXiv-only Planner tasks with smallest-sufficient, non-overlapping answer
+  requirements and explicit evidence-strength rules for prevalence targets;
+- a 4,000-token Planner completion ceiling with malformed-output finish-reason
+  diagnostics;
 - an OpenRouter boundary restricted to DeepSeek, Qwen and Z.ai GLM models;
 - deterministic conversion from model output to domain subquestions;
-- a single Researcher using two structured LLM calls around concurrent arXiv
-  searches over one MCP session;
+- a single Researcher that plans bounded arXiv searches, freezes structured
+  claims, and searches bottom-up for a minimum-cardinality evidence group;
 - explicit evidence statuses and deterministic relevance labels derived from
   factorized per-paper assessments, with a conservative `unknown` abstention;
-- a draft, versioned Researcher assessment dataset and offline metric runner;
-- offline tests covering Planner, Researcher, domain contracts, evaluation,
-  and repository style rules;
+- a draft Agent Memory dataset and offline metrics for paper relevance,
+  group-level support, and minimal evidence-group selection;
+- 73 passing offline tests covering Planner, Researcher, domain contracts,
+  evaluation, and repository style rules;
 - explicit live Planner and Researcher smoke tests under `tests/live`.
+
+## Planner live-validation status
+
+The no-memory Planner and its arXiv-only/action-free requirement policy have
+produced valid live structured outputs. The latest successful reviewed output is
+stored in `tmp/planner_arxiv_only_demo.json`; it predates the newer requirement
+sufficiency and evidence-ownership rules and is retained as a failure-analysis
+example, not Gold.
+
+The strengthened current contract is offline-tested but still awaits a complete
+live revalidation. Two 2,500-token attempts returned truncated JSON. Planner now
+uses 4,000 completion tokens, but the first request at that budget remained
+unresponsive and was terminated without saving partial output.
 
 After completing the editable installation below, run one test module directly:
 
@@ -72,9 +90,11 @@ python -m citeguard.evaluation.runner `
   --predictions eval/fixtures/researcher_assessment_predictions_v0.json
 ```
 
-The bundled assessment dataset is still a human-reviewable draft. The fixture
-validates the runner and metric behavior; its score is not a production-quality
-claim about the Researcher.
+The bundled assessment dataset is still a human-reviewable, mechanism-only
+draft. Its manually authored subquestions are not Planner Gold, and unresolved
+paper and evolution-relation labels are listed in the dataset itself. The
+fixture validates runner and metric behavior; its score is not a semantic
+quality claim about either Planner or Researcher.
 
 ## Local development
 

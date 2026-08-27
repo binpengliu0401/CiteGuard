@@ -1,6 +1,10 @@
 """Convert Planner LLM schemas into stable domain objects."""
 
-from citeguard.domain.research import SubQuestion, SubQuestionStatus
+from citeguard.domain.research import (
+    AnswerRequirement,
+    SubQuestion,
+    SubQuestionStatus,
+)
 from citeguard.planner.schemas import DecompositionOutput
 
 
@@ -40,6 +44,17 @@ def assemble_decomposition(output: DecompositionOutput) -> list[SubQuestion]:
                 # yet persistent or globally unique across sessions.
                 id=f"sq-{index:03d}",
                 question=item.question,
+                primary_answer_target=item.primary_answer_target,
+                answer_requirements=[
+                    AnswerRequirement(
+                        id=f"req-{requirement_index:03d}",
+                        description=requirement,
+                    )
+                    for requirement_index, requirement in enumerate(
+                        item.answer_requirements,
+                        start=1,
+                    )
+                ],
                 # The no-memory path always schedules new research. Reused state
                 # will be assembled by the future memory-aware path.
                 status=SubQuestionStatus.NEW,

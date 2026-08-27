@@ -37,7 +37,7 @@ def main() -> None:
     """Parse CLI arguments, run metrics, and print or save a JSON report."""
 
     parser = argparse.ArgumentParser(
-        description="Evaluate factorized Researcher paper assessments."
+        description="Evaluate Researcher paper relevance and MEG selection."
     )
     parser.add_argument("--dataset", type=Path, required=True)
     parser.add_argument("--predictions", type=Path, required=True)

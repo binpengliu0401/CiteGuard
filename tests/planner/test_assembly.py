@@ -12,9 +12,15 @@ class PlannerAssemblyTests(unittest.TestCase):
         output = DecompositionOutput(
             items=[
                 DecomposedQuestion(
-                    question="Explain the Transformer architecture."
+                    question="Explain the Transformer architecture.",
+                    primary_answer_target="Transformer architecture",
+                    answer_requirements=["Core architecture components"],
                 ),
-                DecomposedQuestion(question="Derive self-attention equations."),
+                DecomposedQuestion(
+                    question="Derive self-attention equations.",
+                    primary_answer_target="Self-attention equations",
+                    answer_requirements=["The attention computation"],
+                ),
             ]
         )
 
@@ -24,12 +30,21 @@ class PlannerAssemblyTests(unittest.TestCase):
         self.assertTrue(
             all(item.status is SubQuestionStatus.NEW for item in result)
         )
+        self.assertEqual(result[0].answer_requirements[0].id, "req-001")
 
     def test_duplicate_subquestions_are_rejected(self) -> None:
         output = DecompositionOutput(
             items=[
-                DecomposedQuestion(question="Explain self-attention."),
-                DecomposedQuestion(question="  EXPLAIN   SELF-ATTENTION.  "),
+                DecomposedQuestion(
+                    question="Explain self-attention.",
+                    primary_answer_target="Self-attention",
+                    answer_requirements=["The attention mechanism"],
+                ),
+                DecomposedQuestion(
+                    question="  EXPLAIN   SELF-ATTENTION.  ",
+                    primary_answer_target="Self-attention explanation",
+                    answer_requirements=["The attention computation"],
+                ),
             ]
         )
 
@@ -44,8 +59,15 @@ class PlannerAssemblyTests(unittest.TestCase):
         ]
         output = DecompositionOutput(
             items=[
-                DecomposedQuestion(question=question)
-                for question in expected_questions
+                DecomposedQuestion(
+                    question=question,
+                    primary_answer_target=f"Target {index}",
+                    answer_requirements=[f"Requirement {index}"],
+                )
+                for index, question in enumerate(
+                    expected_questions,
+                    start=1,
+                )
             ]
         )
 

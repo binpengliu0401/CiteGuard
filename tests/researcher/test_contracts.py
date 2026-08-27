@@ -2,7 +2,11 @@
 
 import unittest
 
-from citeguard.domain.research import SubQuestion, SubQuestionStatus
+from citeguard.domain.research import (
+    AnswerRequirement,
+    SubQuestion,
+    SubQuestionStatus,
+)
 from citeguard.researcher.contracts import ResearchTaskInput
 
 
@@ -12,6 +16,13 @@ class ResearchTaskInputTests(unittest.TestCase):
         return SubQuestion(
             id="sq-001",
             question="How does retrieval affect factual accuracy?",
+            primary_answer_target="Retrieval effects on factual accuracy",
+            answer_requirements=[
+                AnswerRequirement(
+                    id="req-001",
+                    description="A retrieval method and accuracy outcome",
+                )
+            ],
             status=SubQuestionStatus.NEW,
         )
 

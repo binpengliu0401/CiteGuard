@@ -254,8 +254,10 @@ def _parse_response(
     try:
         return output_type.model_validate_json(content)
     except ValidationError as exc:
+        finish_reason = choice.get("finish_reason", "unknown")
         raise OpenRouterPermanentError(
-            "OpenRouter response did not match the required schema"
+            "OpenRouter response did not match the required schema "
+            f"(finish_reason={finish_reason})"
         ) from exc
 
 

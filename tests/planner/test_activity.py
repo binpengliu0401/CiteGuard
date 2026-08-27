@@ -11,12 +11,19 @@ from citeguard.planner.schemas import DecomposedQuestion, DecompositionOutput
 class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
     async def test_no_memory_path_returns_domain_output(self) -> None:
         llm_output = DecompositionOutput(
-            items=[DecomposedQuestion(question="What is an AI agent?")]
+            items=[
+                DecomposedQuestion(
+                    question="What is an AI agent?",
+                    primary_answer_target="Definition of an AI agent",
+                    answer_requirements=["The defining capabilities"],
+                )
+            ]
         )
 
+        request_mock = AsyncMock(return_value=llm_output)
         with patch(
             "citeguard.planner.activity.request_structured_output",
-            new=AsyncMock(return_value=llm_output),
+            new=request_mock,
         ):
             result = await plan_research(
                 PlannerActivityInput(
@@ -31,10 +38,20 @@ class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
             result.sub_questions[0].question,
             "What is an AI agent?",
         )
+        self.assertEqual(
+            result.sub_questions[0].answer_requirements[0].id,
+            "req-001",
+        )
+        self.assertEqual(
+            request_mock.await_args.kwargs["max_completion_tokens"],
+            4_000,
+        )
 
     async def test_memory_path_fails_explicitly(self) -> None:
         from citeguard.domain.research import (
+            EvidenceGroup,
             EvidenceStatus,
+            ResearchClaim,
             ResearchNote,
             ResearchResult,
             ResearchSource,
@@ -48,21 +65,31 @@ class PlannerActivityTests(unittest.IsolatedAsyncioTestCase):
                     id="note-1",
                     question="What is an AI agent?",
                     result=ResearchResult(
-                        answer="An autonomous tool-using system.",
+                        claims=[
+                            ResearchClaim(
+                                id="claim-001",
+                                statement="An agent is an autonomous system.",
+                                source_ids=["2401.00001"],
+                            )
+                        ],
                         evidence_status=EvidenceStatus.SUPPORTED,
                         sources=[
                             ResearchSource(
                                 title="Agent systems",
                                 url="https://arxiv.org/abs/2401.00001",
+                                source_id="2401.00001",
+                                abstract="The paper defines agent systems.",
                                 supported_aspects=(
                                     "The definition of agent systems."
                                 ),
                                 limitations=(
                                     "The paper covers one agent architecture."
                                 ),
-                                source_id="2401.00001",
                             )
                         ],
+                        evidence_group=EvidenceGroup(
+                            source_ids=["2401.00001"]
+                        ),
                     ),
                 )
             ],

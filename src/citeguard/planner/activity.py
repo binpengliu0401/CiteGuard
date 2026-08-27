@@ -16,6 +16,8 @@ from citeguard.planner.contracts import (
 from citeguard.planner.prompts import build_decomposition_prompt
 from citeguard.planner.schemas import DecompositionOutput
 
+PLANNER_MAX_COMPLETION_TOKENS = 4_000
+
 
 @activity.defn(name="plan_research")
 async def plan_research(
@@ -57,6 +59,7 @@ async def plan_research(
         llm_output = await request_structured_output(
             build_decomposition_prompt(input.research_question),
             DecompositionOutput,
+            max_completion_tokens=PLANNER_MAX_COMPLETION_TOKENS,
         )
         sub_questions = assemble_decomposition(llm_output)
         return PlannerActivityOutput(sub_questions=sub_questions)

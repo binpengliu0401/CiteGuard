@@ -1,103 +1,224 @@
 {
-  "dataset_id": "researcher-assessment-pilot",
-  "dataset_version": "0.4.0-draft",
+  "dataset_id": "researcher-agent-memory-meg-pilot",
+  "dataset_version": "0.6.0-draft",
   "system_id": "controlled-review-fixture",
   "predictions": [
     {
-      "item_id": "scifact-task__scifact",
+      "item_id": "memory-r1-control__memory-r1",
       "object_match": "full",
       "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "constraint_match": "full",
       "evidence_kind": "answer_bearing",
       "answer_coverage": "full"
     },
     {
-      "item_id": "scifact-task__multivers",
-      "object_match": "partial",
-      "problem_match": "full",
-      "constraint_match": "not_applicable",
+      "item_id": "memory-r1-control__a-mem",
+      "object_match": "full",
+      "problem_match": "partial",
+      "constraint_match": "partial",
       "evidence_kind": "answer_bearing",
       "answer_coverage": "partial"
     },
     {
-      "item_id": "scifact-task__fever",
-      "object_match": "partial",
+      "item_id": "memory-r1-control__memgpt",
+      "object_match": "full",
       "problem_match": "partial",
-      "constraint_match": "not_applicable",
+      "constraint_match": "partial",
       "evidence_kind": "context_only",
       "answer_coverage": "none"
     },
     {
-      "item_id": "scifact-task__sbert",
+      "item_id": "memory-r1-control__sbert",
       "object_match": "mismatch",
       "problem_match": "mismatch",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "none",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-record__scifact",
-      "object_match": "full",
-      "problem_match": "full",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "answer_bearing",
-      "answer_coverage": "full"
-    },
-    {
-      "item_id": "scifact-record__multivers",
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-record__fever",
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-record__sbert",
-      "object_match": "mismatch",
-      "problem_match": "mismatch",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "none",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-baselines__scifact",
-      "object_match": "full",
-      "problem_match": "full",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "answer_bearing",
-      "answer_coverage": "full"
-    },
-    {
-      "item_id": "scifact-baselines__multivers",
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-baselines__fever",
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
-      "evidence_kind": "context_only",
-      "answer_coverage": "none"
-    },
-    {
-      "item_id": "scifact-baselines__sbert",
-      "object_match": "partial",
-      "problem_match": "partial",
-      "constraint_match": "not_applicable",
+      "constraint_match": "mismatch",
       "evidence_kind": "unknown",
       "answer_coverage": "none"
+    },
+    {
+      "item_id": "tier-to-agentic__memgpt",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "tier-to-agentic__a-mem",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "tier-to-agentic__survey",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "context_only",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "tier-to-agentic__sbert",
+      "object_match": "mismatch",
+      "problem_match": "mismatch",
+      "constraint_match": "mismatch",
+      "evidence_kind": "none",
+      "answer_coverage": "none"
+    },
+    {
+      "item_id": "three-stage-control__memgpt",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "three-stage-control__a-mem",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "three-stage-control__memory-r1",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    },
+    {
+      "item_id": "three-stage-control__memcon",
+      "object_match": "full",
+      "problem_match": "full",
+      "constraint_match": "full",
+      "evidence_kind": "answer_bearing",
+      "answer_coverage": "partial"
+    }
+  ],
+  "meg_predictions": [
+    {
+      "case_id": "memory-r1-control",
+      "group_assessments": [
+        {
+          "source_ids": ["2508.19828v1"],
+          "support": "full"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["1908.10084v1"],
+          "support": "none"
+        }
+      ],
+      "predicted_megs": [["2508.19828v1"]]
+    },
+    {
+      "case_id": "tier-to-agentic",
+      "group_assessments": [
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2603.07670v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["1908.10084v1"],
+          "support": "none"
+        },
+        {
+          "source_ids": ["2310.08560v1", "2502.12110v1"],
+          "support": "full"
+        }
+      ],
+      "predicted_megs": [
+        ["2310.08560v1", "2502.12110v1"]
+      ]
+    },
+    {
+      "case_id": "three-stage-control",
+      "group_assessments": [
+        {
+          "source_ids": ["2310.08560v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2502.12110v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2508.19828v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": ["2607.13591v1"],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2508.19828v1"
+          ],
+          "support": "full"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2502.12110v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "partial"
+        },
+        {
+          "source_ids": [
+            "2310.08560v1",
+            "2502.12110v1",
+            "2508.19828v1",
+            "2607.13591v1"
+          ],
+          "support": "full"
+        }
+      ],
+      "predicted_megs": [
+        [
+          "2310.08560v1",
+          "2502.12110v1",
+          "2508.19828v1"
+        ]
+      ]
     }
   ]
 }
