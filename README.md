@@ -4,7 +4,19 @@ CiteGuard is an academic deep-research system under active development. Its goal
 
 The formal source tree currently contains shared research-domain contracts, an
 executable Planner path without memory reuse, and a single-subquestion
-Researcher. The complete business Workflow is not implemented yet.
+Researcher. A formal minimal Temporal Workflow now connects Planner, exactly
+one Researcher, deterministic Writer, and deterministic Verifier.
+
+## Documentation
+
+- [Architecture and code guide](CiteGuard_Architecture_and_Code_Guide.pdf):
+  rendered 31-page overview of the current modules, contracts, evaluation, and
+  minimal Temporal execution results;
+- [System map](docs/SYSTEM.md): repository boundary and document router;
+- [Implementation status](docs/STATUS.md): implemented, validated, and planned
+  capabilities;
+- [Design decisions](%E8%AE%A8%E8%AE%BA%E4%B8%8E%E8%AE%BE%E8%AE%A1%E5%86%B3%E7%AD%96%E8%AE%B0%E5%BD%95.md):
+  reasoning behind the Planner, Claim/MEG, Writer/Verifier, and Workflow slices.
 
 ## Target capabilities
 
@@ -53,8 +65,22 @@ flowchart LR
   factorized per-paper assessments, with a conservative `unknown` abstention;
 - a draft Agent Memory dataset and offline metrics for paper relevance,
   group-level support, and minimal evidence-group selection;
-- 73 passing offline tests covering Planner, Researcher, domain contracts,
-  evaluation, and repository style rules;
+- frozen Writer/Verifier boundary contracts with structured report provenance,
+  typed verification issues, and tested Temporal serialization;
+- a six-case synthetic Writer/Verifier draft fixture covering supported output,
+  MEG preservation, provenance errors, overclaiming, and retry localization;
+- an independent six-case Writer Gold draft with deterministic structure,
+  evidence-state, Claim-coverage, and provenance evaluation;
+- a deterministic Writer Activity that emits one attributable statement per
+  Researcher Claim and preserves evidence state, ordering, and limitations;
+- a deterministic Verifier Activity with scoped Claim/source gates, exact
+  evidence-state checks, safe unsupported-text rejection, and retry scope;
+- an exactly-one-Researcher Temporal Workflow, production Worker, and client
+  with bounded infrastructure retries and normal content-rejection results;
+- 117 passing offline tests covering Planner, Researcher, Writer/Verifier,
+  Workflow orchestration, domain contracts, evaluation, and style rules;
+- a local Temporal smoke covering approval, Verifier rejection, and transient
+  Researcher retry with inspectable execution-history counts;
 - explicit live Planner and Researcher smoke tests under `tests/live`.
 
 ## Planner live-validation status
@@ -96,6 +122,23 @@ paper and evolution-relation labels are listed in the dataset itself. The
 fixture validates runner and metric behavior; its score is not a semantic
 quality claim about either Planner or Researcher.
 
+The Writer/Verifier fixture lives at
+`eval/datasets/writer_verifier_gold_draft_v0.json`. It fixes Researcher results,
+Writer coverage expectations, candidate reports, and Gold verification results.
+It is synthetic and draft: it supports implementation and regression work, but
+does not claim that Verifier or semantic Writer behavior is calibrated.
+The real deterministic Verifier runs all six cases: structural cases match
+their Gold types, while causal and numeric cases are safely rejected as generic
+`unsupported` until a calibrated semantic layer exists.
+
+The Writer-only fixture lives at
+`eval/datasets/writer_gold_draft_v0.json`. It covers every Writer v0 evidence
+state, new and memory-reused work, zero/one/many Claims, singleton and
+multi-source MEGs, and multi-section isolation. Its deterministic evaluator
+reports section coverage, Claim recall, provenance precision/recall, evidence
+state accuracy, and typed hard-gate failures without judging free-form prose.
+All six cases now evaluate the actual deterministic Writer implementation.
+
 ## Local development
 
 Requirements: Python 3.10+ and the [Temporal CLI](https://github.com/temporalio/cli/releases).
@@ -131,7 +174,26 @@ python .\tests\planner\test_activity.py
 Start a local Temporal development server in another terminal:
 
 ```bash
-temporal server start-dev --db-filename temporal.db
+temporal server start-dev --ip 127.0.0.1 --db-filename temporal.db
 ```
 
 The Temporal UI is available at <http://localhost:8233> by default.
+
+Start the production Worker in a second terminal:
+
+```powershell
+python -m citeguard.worker
+```
+
+Run one minimal Workflow from a third terminal:
+
+```powershell
+python -m citeguard.client "What does the evidence show?" `
+  --session-id local-session
+```
+
+Run the deterministic local Temporal smoke without model or MCP calls:
+
+```powershell
+python .\tests\live\temporal_workflow_smoke.py
+```

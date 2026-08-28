@@ -1,0 +1,38 @@
+{
+  "temporal_address": "127.0.0.1:17233",
+  "approved_case": {
+    "approved": true,
+    "failed_sub_question_ids": [],
+    "issue_types": [],
+    "report_statement": "The synthetic abstract reports a supported finding.",
+    "completed_activity_events": 4,
+    "workflow_completed_events": 1,
+    "history_event_count": 29
+  },
+  "rejected_case": {
+    "approved": false,
+    "failed_sub_question_ids": [
+      "sq-001"
+    ],
+    "issue_types": [
+      "unsupported"
+    ],
+    "report_statement": "The report adds an unsupported conclusion.",
+    "completed_activity_events": 4,
+    "workflow_completed_events": 1,
+    "history_event_count": 29
+  },
+  "retried_case": {
+    "approved": true,
+    "failed_sub_question_ids": [],
+    "issue_types": [],
+    "report_statement": "The synthetic abstract reports a supported finding.",
+    "completed_activity_events": 4,
+    "workflow_completed_events": 1,
+    "history_event_count": 29,
+    "research_attempts": [
+      1,
+      2
+    ]
+  }
+}

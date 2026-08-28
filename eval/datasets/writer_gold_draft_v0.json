@@ -1,0 +1,516 @@
+{
+  "schema_version": "1",
+  "dataset_id": "writer-fixed-contract",
+  "version": "0.1.0-draft",
+  "annotation_status": "draft",
+  "evidence_origin": "synthetic",
+  "evaluation_scope": "writer_fixed_contract",
+  "open_adjudications": [
+    "Semantic paraphrase scoring remains deferred."
+  ],
+  "cases": [
+    {
+      "case_id": "supported-single-source",
+      "kind": "supported_single_source",
+      "description": "One Claim keeps one exact source.",
+      "writer_input": {
+        "research_question": "How does caching affect answer latency?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-single",
+              "question": "What latency change follows from caching?",
+              "primary_answer_target": "Measure the latency change.",
+              "answer_requirements": [
+                {
+                  "id": "req-single",
+                  "description": "State the measured latency difference."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-single",
+                  "statement": "Caching reduced median latency by 18 ms.",
+                  "source_ids": [
+                    "source-single"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic cache latency study",
+                  "url": "https://example.test/cache-latency",
+                  "source_id": "source-single",
+                  "abstract": "Caching reduced median latency by 18 ms.",
+                  "supported_aspects": "Median latency difference.",
+                  "limitations": "Synthetic fixture evidence only."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-single"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-single",
+          "evidence_status": "supported",
+          "evidence_reason": null,
+          "claims": [
+            {
+              "claim_id": "claim-single",
+              "source_ids": [
+                "source-single"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "supported-multi-claim-meg",
+      "kind": "supported_multi_claim_meg",
+      "description": "Two Claims retain complementary MEG sources.",
+      "writer_input": {
+        "research_question": "Which controls improve grounded answers?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-multi",
+              "question": "Which controls improve grounded answers?",
+              "primary_answer_target": "Identify complementary controls.",
+              "answer_requirements": [
+                {
+                  "id": "req-multi-a",
+                  "description": "Identify a retrieval control."
+                },
+                {
+                  "id": "req-multi-b",
+                  "description": "Identify a citation control."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-reranking",
+                  "statement": "Reranking improved evidence recall.",
+                  "source_ids": [
+                    "source-reranking"
+                  ]
+                },
+                {
+                  "id": "claim-citation",
+                  "statement": "Citation checks reduced unsupported text.",
+                  "source_ids": [
+                    "source-citation"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic reranking study",
+                  "url": "https://example.test/reranking",
+                  "source_id": "source-reranking",
+                  "abstract": "Reranking improved evidence recall.",
+                  "supported_aspects": "Retrieval-stage evidence recall.",
+                  "limitations": "Citation checking was not evaluated."
+                },
+                {
+                  "title": "Synthetic citation study",
+                  "url": "https://example.test/citation",
+                  "source_id": "source-citation",
+                  "abstract": "Checks reduced unsupported report text.",
+                  "supported_aspects": "Unsupported report text.",
+                  "limitations": "Reranking was not evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-reranking",
+                  "source-citation"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-multi",
+          "evidence_status": "supported",
+          "evidence_reason": null,
+          "claims": [
+            {
+              "claim_id": "claim-reranking",
+              "source_ids": [
+                "source-reranking"
+              ]
+            },
+            {
+              "claim_id": "claim-citation",
+              "source_ids": [
+                "source-citation"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "supported-joint-source-claim",
+      "kind": "supported_joint_source_claim",
+      "description": "One Claim preserves two jointly required sources.",
+      "writer_input": {
+        "research_question": "Do two studies support the same trend?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-joint",
+              "question": "Do both studies support the trend?",
+              "primary_answer_target": "State the joint trend evidence.",
+              "answer_requirements": [
+                {
+                  "id": "req-joint",
+                  "description": "Use evidence from both study settings."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-joint",
+                  "statement": "Both settings showed lower error rates.",
+                  "source_ids": [
+                    "source-joint-a",
+                    "source-joint-b"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic study in setting A",
+                  "url": "https://example.test/setting-a",
+                  "source_id": "source-joint-a",
+                  "abstract": "The method lowered error in setting A.",
+                  "supported_aspects": "Error reduction in setting A.",
+                  "limitations": "Setting B was not studied."
+                },
+                {
+                  "title": "Synthetic study in setting B",
+                  "url": "https://example.test/setting-b",
+                  "source_id": "source-joint-b",
+                  "abstract": "The method lowered error in setting B.",
+                  "supported_aspects": "Error reduction in setting B.",
+                  "limitations": "Setting A was not studied."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-joint-a",
+                  "source-joint-b"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-joint",
+          "evidence_status": "supported",
+          "evidence_reason": null,
+          "claims": [
+            {
+              "claim_id": "claim-joint",
+              "source_ids": [
+                "source-joint-a",
+                "source-joint-b"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "insufficient-partial-evidence",
+      "kind": "insufficient_partial_evidence",
+      "description": "Partial evidence keeps its Claim and reason.",
+      "writer_input": {
+        "research_question": "Does method X generalize across domains?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-partial",
+              "question": "Does method X generalize across domains?",
+              "primary_answer_target": "Assess cross-domain evidence.",
+              "answer_requirements": [
+                {
+                  "id": "req-partial",
+                  "description": "Require evidence from multiple domains."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-partial",
+                  "statement": "Method X improved scores in one domain.",
+                  "source_ids": [
+                    "source-partial"
+                  ]
+                }
+              ],
+              "evidence_status": "insufficient_evidence",
+              "sources": [
+                {
+                  "title": "Synthetic single-domain study",
+                  "url": "https://example.test/one-domain",
+                  "source_id": "source-partial",
+                  "abstract": "Method X improved scores in one domain.",
+                  "supported_aspects": "Performance in one domain.",
+                  "limitations": "No cross-domain evaluation was run."
+                }
+              ],
+              "evidence_group": null,
+              "evidence_reason": "Only one domain was evaluated."
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-partial",
+          "evidence_status": "insufficient_evidence",
+          "evidence_reason": "Only one domain was evaluated.",
+          "claims": [
+            {
+              "claim_id": "claim-partial",
+              "source_ids": [
+                "source-partial"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "case_id": "no-relevant-sources",
+      "kind": "no_relevant_sources",
+      "description": "No evidence yields an empty section with a reason.",
+      "writer_input": {
+        "research_question": "Was the method tested in polar regions?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-none",
+              "question": "Was the method tested in polar regions?",
+              "primary_answer_target": "Find polar-region evaluations.",
+              "answer_requirements": [
+                {
+                  "id": "req-none",
+                  "description": "Require a polar-region evaluation."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [],
+              "evidence_status": "no_relevant_sources",
+              "sources": [],
+              "evidence_group": null,
+              "evidence_reason": "No polar-region study was found."
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-none",
+          "evidence_status": "no_relevant_sources",
+          "evidence_reason": "No polar-region study was found.",
+          "claims": []
+        }
+      ]
+    },
+    {
+      "case_id": "mixed-new-and-reused",
+      "kind": "mixed_new_and_reused",
+      "description": "New and reused results remain ordered and isolated.",
+      "writer_input": {
+        "research_question": "How do indexing and decoding affect QA?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-new",
+              "question": "How does indexing affect retrieval recall?",
+              "primary_answer_target": "State the recall effect.",
+              "answer_requirements": [
+                {
+                  "id": "req-new",
+                  "description": "Report the indexing result."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-new",
+                  "statement": "Hybrid indexing improved retrieval recall.",
+                  "source_ids": [
+                    "source-new"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic indexing study",
+                  "url": "https://example.test/indexing",
+                  "source_id": "source-new",
+                  "abstract": "Hybrid indexing improved retrieval recall.",
+                  "supported_aspects": "Retrieval recall.",
+                  "limitations": "Decoding was not evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-new"
+                ]
+              },
+              "evidence_reason": null
+            }
+          },
+          {
+            "sub_question": {
+              "id": "sq-reused",
+              "question": "How does decoding affect citation accuracy?",
+              "primary_answer_target": "State the citation effect.",
+              "answer_requirements": [
+                {
+                  "id": "req-reused",
+                  "description": "Report the decoding result."
+                }
+              ],
+              "status": "reused_from_memory",
+              "reused_result": {
+                "claims": [
+                  {
+                    "id": "claim-reused",
+                    "statement": "Constrained decoding improved citations.",
+                    "source_ids": [
+                      "source-reused"
+                    ]
+                  }
+                ],
+                "evidence_status": "supported",
+                "sources": [
+                  {
+                    "title": "Synthetic decoding study",
+                    "url": "https://example.test/decoding",
+                    "source_id": "source-reused",
+                    "abstract": "Constrained decoding improved citations.",
+                    "supported_aspects": "Citation accuracy.",
+                    "limitations": "Retrieval recall was not evaluated."
+                  }
+                ],
+                "evidence_group": {
+                  "source_ids": [
+                    "source-reused"
+                  ]
+                },
+                "evidence_reason": null
+              },
+              "source_note_id": "note-decoding"
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-reused",
+                  "statement": "Constrained decoding improved citations.",
+                  "source_ids": [
+                    "source-reused"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic decoding study",
+                  "url": "https://example.test/decoding",
+                  "source_id": "source-reused",
+                  "abstract": "Constrained decoding improved citations.",
+                  "supported_aspects": "Citation accuracy.",
+                  "limitations": "Retrieval recall was not evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-reused"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "gold_sections": [
+        {
+          "sub_question_id": "sq-new",
+          "evidence_status": "supported",
+          "evidence_reason": null,
+          "claims": [
+            {
+              "claim_id": "claim-new",
+              "source_ids": [
+                "source-new"
+              ]
+            }
+          ]
+        },
+        {
+          "sub_question_id": "sq-reused",
+          "evidence_status": "supported",
+          "evidence_reason": null,
+          "claims": [
+            {
+              "claim_id": "claim-reused",
+              "source_ids": [
+                "source-reused"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

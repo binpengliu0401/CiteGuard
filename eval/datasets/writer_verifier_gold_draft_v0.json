@@ -1,0 +1,765 @@
+{
+  "schema_version": "1",
+  "dataset_id": "writer-verifier-fixed-contract",
+  "version": "0.1.0-draft",
+  "annotation_status": "draft",
+  "evidence_origin": "synthetic",
+  "evaluation_scope": "writer_verifier_fixed_contract",
+  "open_adjudications": [
+    "Exact prose quality thresholds remain open until implementation review."
+  ],
+  "cases": [
+    {
+      "case_id": "supported-single-source",
+      "kind": "supported_single_source",
+      "description": "One supported claim keeps its source attribution.",
+      "writer_input": {
+        "research_question": "How does caching affect answer latency?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-single",
+              "question": "What latency change follows from caching?",
+              "primary_answer_target": "Measure the latency change.",
+              "answer_requirements": [
+                {
+                  "id": "req-single",
+                  "description": "State the measured latency difference."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-single",
+                  "statement": "Caching reduced median latency by 18 ms.",
+                  "source_ids": [
+                    "source-single"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic cache latency study",
+                  "url": "https://example.test/cache-latency",
+                  "source_id": "source-single",
+                  "abstract": "Caching reduced median latency by 18 ms.",
+                  "supported_aspects": "Median latency difference.",
+                  "limitations": "Synthetic fixture evidence only."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-single"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-single",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-single"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "How does caching affect answer latency?",
+        "sections": [
+          {
+            "sub_question_id": "sq-single",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-single",
+                "text": "Caching reduced median latency by 18 ms.",
+                "sub_question_id": "sq-single",
+                "claim_ids": [
+                  "claim-single"
+                ],
+                "source_ids": [
+                  "source-single"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": [
+          "The evidence is limited to the measured setup."
+        ]
+      },
+      "gold_verification": {
+        "approved": true,
+        "issues": [],
+        "failed_sub_question_ids": []
+      }
+    },
+    {
+      "case_id": "supported-multi-source-meg",
+      "kind": "supported_multi_source_meg",
+      "description": "Two complementary claims preserve the selected MEG.",
+      "writer_input": {
+        "research_question": "Which controls improve grounded answers?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-meg",
+              "question": "Which controls improve grounded answers?",
+              "primary_answer_target": "Identify complementary controls.",
+              "answer_requirements": [
+                {
+                  "id": "req-meg-a",
+                  "description": "Identify a retrieval control."
+                },
+                {
+                  "id": "req-meg-b",
+                  "description": "Identify a citation control."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-meg-a",
+                  "statement": "Reranking improved evidence recall.",
+                  "source_ids": [
+                    "source-meg-a"
+                  ]
+                },
+                {
+                  "id": "claim-meg-b",
+                  "statement": "Citation checks reduced unsupported text.",
+                  "source_ids": [
+                    "source-meg-b"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic reranking study",
+                  "url": "https://example.test/reranking",
+                  "source_id": "source-meg-a",
+                  "abstract": "Reranking improved evidence recall.",
+                  "supported_aspects": "Retrieval-stage evidence recall.",
+                  "limitations": "No citation checking was evaluated."
+                },
+                {
+                  "title": "Synthetic citation study",
+                  "url": "https://example.test/citation-checks",
+                  "source_id": "source-meg-b",
+                  "abstract": "Checks reduced unsupported report text.",
+                  "supported_aspects": "Citation-stage unsupported text.",
+                  "limitations": "No retrieval reranking was evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-meg-a",
+                  "source-meg-b"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-meg",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-meg-a",
+            "claim-meg-b"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "Which controls improve grounded answers?",
+        "sections": [
+          {
+            "sub_question_id": "sq-meg",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-meg-a",
+                "text": "Reranking improved evidence recall.",
+                "sub_question_id": "sq-meg",
+                "claim_ids": [
+                  "claim-meg-a"
+                ],
+                "source_ids": [
+                  "source-meg-a"
+                ]
+              },
+              {
+                "id": "statement-meg-b",
+                "text": "Citation checks reduced unsupported text.",
+                "sub_question_id": "sq-meg",
+                "claim_ids": [
+                  "claim-meg-b"
+                ],
+                "source_ids": [
+                  "source-meg-b"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": [
+          "The two controls were evaluated separately."
+        ]
+      },
+      "gold_verification": {
+        "approved": true,
+        "issues": [],
+        "failed_sub_question_ids": []
+      }
+    },
+    {
+      "case_id": "invalid-provenance",
+      "kind": "invalid_provenance",
+      "description": "A claim is paired with another claim's source.",
+      "writer_input": {
+        "research_question": "What affects answer accuracy and speed?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-provenance",
+              "question": "What affects answer accuracy and speed?",
+              "primary_answer_target": "Separate accuracy and speed effects.",
+              "answer_requirements": [
+                {
+                  "id": "req-provenance-a",
+                  "description": "State the accuracy result."
+                },
+                {
+                  "id": "req-provenance-b",
+                  "description": "State the speed result."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-accuracy",
+                  "statement": "Reranking increased answer accuracy.",
+                  "source_ids": [
+                    "source-accuracy"
+                  ]
+                },
+                {
+                  "id": "claim-speed",
+                  "statement": "Caching reduced response time.",
+                  "source_ids": [
+                    "source-speed"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic accuracy study",
+                  "url": "https://example.test/accuracy",
+                  "source_id": "source-accuracy",
+                  "abstract": "Reranking increased answer accuracy.",
+                  "supported_aspects": "Answer accuracy.",
+                  "limitations": "Response time was not measured."
+                },
+                {
+                  "title": "Synthetic speed study",
+                  "url": "https://example.test/speed",
+                  "source_id": "source-speed",
+                  "abstract": "Caching reduced response time.",
+                  "supported_aspects": "Response time.",
+                  "limitations": "Answer accuracy was not measured."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-accuracy",
+                  "source-speed"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-provenance",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-accuracy",
+            "claim-speed"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "What affects answer accuracy and speed?",
+        "sections": [
+          {
+            "sub_question_id": "sq-provenance",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-wrong-source",
+                "text": "Reranking increased answer accuracy.",
+                "sub_question_id": "sq-provenance",
+                "claim_ids": [
+                  "claim-accuracy"
+                ],
+                "source_ids": [
+                  "source-speed"
+                ]
+              },
+              {
+                "id": "statement-speed",
+                "text": "Caching reduced response time.",
+                "sub_question_id": "sq-provenance",
+                "claim_ids": [
+                  "claim-speed"
+                ],
+                "source_ids": [
+                  "source-speed"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": []
+      },
+      "gold_verification": {
+        "approved": false,
+        "issues": [
+          {
+            "type": "invalid_provenance",
+            "sub_question_id": "sq-provenance",
+            "reason": "The cited source belongs to a different claim.",
+            "statement_id": "statement-wrong-source",
+            "claim_ids": [
+              "claim-accuracy"
+            ],
+            "source_ids": [
+              "source-speed"
+            ]
+          }
+        ],
+        "failed_sub_question_ids": [
+          "sq-provenance"
+        ]
+      }
+    },
+    {
+      "case_id": "causal-upgrade",
+      "kind": "causal_upgrade",
+      "description": "An observed association is rewritten as causation.",
+      "writer_input": {
+        "research_question": "Does tool use cause better task scores?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-causal",
+              "question": "What relation links tool use and task scores?",
+              "primary_answer_target": "Characterize the observed relation.",
+              "answer_requirements": [
+                {
+                  "id": "req-causal",
+                  "description": "Preserve the study's causal scope."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-association",
+                  "statement": "Tool use was associated with higher scores.",
+                  "source_ids": [
+                    "source-association"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic observational tool study",
+                  "url": "https://example.test/tool-association",
+                  "source_id": "source-association",
+                  "abstract": "Tool use correlated with higher task scores.",
+                  "supported_aspects": "Observed association with scores.",
+                  "limitations": "The design cannot establish causality."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-association"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-causal",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-association"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "Does tool use cause better task scores?",
+        "sections": [
+          {
+            "sub_question_id": "sq-causal",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-causal",
+                "text": "Tool use caused higher task scores.",
+                "sub_question_id": "sq-causal",
+                "claim_ids": [
+                  "claim-association"
+                ],
+                "source_ids": [
+                  "source-association"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": []
+      },
+      "gold_verification": {
+        "approved": false,
+        "issues": [
+          {
+            "type": "causal_upgrade",
+            "sub_question_id": "sq-causal",
+            "reason": "The evidence shows association, not causation.",
+            "statement_id": "statement-causal",
+            "claim_ids": [
+              "claim-association"
+            ],
+            "source_ids": [
+              "source-association"
+            ]
+          }
+        ],
+        "failed_sub_question_ids": [
+          "sq-causal"
+        ]
+      }
+    },
+    {
+      "case_id": "evidence-status-overstatement",
+      "kind": "evidence_status_overstatement",
+      "description": "Partial evidence is presented as a supported answer.",
+      "writer_input": {
+        "research_question": "Does method X generalize across domains?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-status",
+              "question": "Does method X generalize across domains?",
+              "primary_answer_target": "Assess cross-domain evidence.",
+              "answer_requirements": [
+                {
+                  "id": "req-status",
+                  "description": "Require evidence from multiple domains."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-one-domain",
+                  "statement": "Method X improved scores in one domain.",
+                  "source_ids": [
+                    "source-one-domain"
+                  ]
+                }
+              ],
+              "evidence_status": "insufficient_evidence",
+              "sources": [
+                {
+                  "title": "Synthetic single-domain study",
+                  "url": "https://example.test/one-domain",
+                  "source_id": "source-one-domain",
+                  "abstract": "Method X improved scores in one domain.",
+                  "supported_aspects": "Performance in one domain.",
+                  "limitations": "No cross-domain evaluation was run."
+                }
+              ],
+              "evidence_group": null,
+              "evidence_reason": "Only one domain was evaluated."
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-status",
+          "expected_evidence_status": "insufficient_evidence",
+          "expected_evidence_reason": "Only one domain was evaluated.",
+          "required_claim_ids": [
+            "claim-one-domain"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "Does method X generalize across domains?",
+        "sections": [
+          {
+            "sub_question_id": "sq-status",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-status",
+                "text": "Method X generalizes across domains.",
+                "sub_question_id": "sq-status",
+                "claim_ids": [
+                  "claim-one-domain"
+                ],
+                "source_ids": [
+                  "source-one-domain"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": []
+      },
+      "gold_verification": {
+        "approved": false,
+        "issues": [
+          {
+            "type": "evidence_status_overstatement",
+            "sub_question_id": "sq-status",
+            "reason": "The report hides the insufficient evidence state.",
+            "statement_id": "statement-status",
+            "claim_ids": [
+              "claim-one-domain"
+            ],
+            "source_ids": [
+              "source-one-domain"
+            ]
+          }
+        ],
+        "failed_sub_question_ids": [
+          "sq-status"
+        ]
+      }
+    },
+    {
+      "case_id": "targeted-localization",
+      "kind": "targeted_localization",
+      "description": "One bad section does not fail an unrelated section.",
+      "writer_input": {
+        "research_question": "How do indexing and decoding affect QA?",
+        "research_results": [
+          {
+            "sub_question": {
+              "id": "sq-indexing",
+              "question": "How does indexing affect retrieval recall?",
+              "primary_answer_target": "State the recall effect.",
+              "answer_requirements": [
+                {
+                  "id": "req-indexing",
+                  "description": "Report the indexing result."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-indexing",
+                  "statement": "Hybrid indexing improved retrieval recall.",
+                  "source_ids": [
+                    "source-indexing"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic indexing study",
+                  "url": "https://example.test/indexing",
+                  "source_id": "source-indexing",
+                  "abstract": "Hybrid indexing improved retrieval recall.",
+                  "supported_aspects": "Retrieval recall.",
+                  "limitations": "Decoding was not evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-indexing"
+                ]
+              },
+              "evidence_reason": null
+            }
+          },
+          {
+            "sub_question": {
+              "id": "sq-decoding",
+              "question": "How does decoding affect citation accuracy?",
+              "primary_answer_target": "State the citation effect.",
+              "answer_requirements": [
+                {
+                  "id": "req-decoding",
+                  "description": "Report the decoding result."
+                }
+              ],
+              "status": "new",
+              "reused_result": null,
+              "source_note_id": null
+            },
+            "result": {
+              "claims": [
+                {
+                  "id": "claim-decoding",
+                  "statement": "Constrained decoding improved citations.",
+                  "source_ids": [
+                    "source-decoding"
+                  ]
+                }
+              ],
+              "evidence_status": "supported",
+              "sources": [
+                {
+                  "title": "Synthetic decoding study",
+                  "url": "https://example.test/decoding",
+                  "source_id": "source-decoding",
+                  "abstract": "Constrained decoding improved citations.",
+                  "supported_aspects": "Citation accuracy.",
+                  "limitations": "Retrieval recall was not evaluated."
+                }
+              ],
+              "evidence_group": {
+                "source_ids": [
+                  "source-decoding"
+                ]
+              },
+              "evidence_reason": null
+            }
+          }
+        ]
+      },
+      "writer_expectations": [
+        {
+          "sub_question_id": "sq-indexing",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-indexing"
+          ]
+        },
+        {
+          "sub_question_id": "sq-decoding",
+          "expected_evidence_status": "supported",
+          "expected_evidence_reason": null,
+          "required_claim_ids": [
+            "claim-decoding"
+          ]
+        }
+      ],
+      "candidate_report": {
+        "research_question": "How do indexing and decoding affect QA?",
+        "sections": [
+          {
+            "sub_question_id": "sq-indexing",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-indexing",
+                "text": "Hybrid indexing improved retrieval recall.",
+                "sub_question_id": "sq-indexing",
+                "claim_ids": [
+                  "claim-indexing"
+                ],
+                "source_ids": [
+                  "source-indexing"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          },
+          {
+            "sub_question_id": "sq-decoding",
+            "evidence_status": "supported",
+            "statements": [
+              {
+                "id": "statement-decoding",
+                "text": "Constrained decoding doubled citation accuracy.",
+                "sub_question_id": "sq-decoding",
+                "claim_ids": [
+                  "claim-decoding"
+                ],
+                "source_ids": [
+                  "source-decoding"
+                ]
+              }
+            ],
+            "evidence_reason": null
+          }
+        ],
+        "limitations": []
+      },
+      "gold_verification": {
+        "approved": false,
+        "issues": [
+          {
+            "type": "unsupported_number",
+            "sub_question_id": "sq-decoding",
+            "reason": "No evidence supports the claimed doubling.",
+            "statement_id": "statement-decoding",
+            "claim_ids": [
+              "claim-decoding"
+            ],
+            "source_ids": [
+              "source-decoding"
+            ]
+          }
+        ],
+        "failed_sub_question_ids": [
+          "sq-decoding"
+        ]
+      }
+    }
+  ]
+}

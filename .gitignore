@@ -24,12 +24,12 @@ htmlcov/
 *.p12
 *.pfx
 
-# Local agent context and project design documents
+# Keep arbitrary agent notes local while versioning project documentation.
 *.md
 !/README.md
-/docs/
-/讨论与设计决策记录.md
-/CiteGuard_Architecture_and_Code_Guide.pdf
+!/docs/
+!/docs/**/*.md
+!/讨论与设计决策记录.md
 
 # Private learning and technical-validation spikes
 /test/
@@ -44,7 +44,7 @@ htmlcov/
 *.code-workspace
 
 # Local development tools
-Tools/
+/Tools/
 temporal.exe
 
 # Temporal local development state
